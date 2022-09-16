@@ -7,23 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-<!-- MacOS
+    <!-- MacOS
   <PackageReference Include="OpenTK" Version="3.2.0"/>
--->    
-<!-- Windows
+-->
+    <!-- Windows
   <PackageReference Include="OpenTK.NetCore" Version="*" />
 -->
-  <PackageReference Include="OpenTK.NetCore" Version="*" />
+    <PackageReference Include="OpenTK.NetCore" Version="*" />
   </ItemGroup>
 
-  <!-- <ItemGroup> [TODO:] para que serve isto?
+  <!-- <ItemGroup>
     <ProjectReference Include="..\..\CG_Biblioteca\CG_Biblioteca.csproj" />
   </ItemGroup> -->
 
   <ItemGroup>
-     <Reference Include="CG_Biblioteca">
-       <HintPath>..\..\CG_Biblioteca\bin\Debug\net6.0\CG_Biblioteca.dll</HintPath>
-     </Reference>
+    <Reference Include="CG_Biblioteca">
+      <HintPath>..\..\CG_Biblioteca\bin\Debug\net6.0\CG_Biblioteca.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
