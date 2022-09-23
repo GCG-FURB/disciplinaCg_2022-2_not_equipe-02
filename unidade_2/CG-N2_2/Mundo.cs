@@ -78,7 +78,7 @@ namespace gcgcg
       objetoSelecionado = obj_Circulo;
 #endif
 #if CG_OpenGL
-      GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+      GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 #endif
     }
     protected override void OnUpdateFrame(FrameEventArgs e)
