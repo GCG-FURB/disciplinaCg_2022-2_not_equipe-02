@@ -55,7 +55,7 @@ namespace gcgcg
 
       objetoId = Utilitario.charProximo(objetoId);
       obj_Circulo = new Circulo(objetoId, null, qtdePontosCirculo, 100);
-      obj_Circulo.ObjetoCor.CorR = 255; obj_Circulo.ObjetoCor.CorG = 255; obj_Circulo.ObjetoCor.CorB = 0;
+      obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
       obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
       obj_Circulo.PrimitivaTamanho = 5;
 
@@ -78,7 +78,7 @@ namespace gcgcg
       objetoSelecionado = obj_Circulo;
 #endif
 #if CG_OpenGL
-      GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+      GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 #endif
     }
     protected override void OnUpdateFrame(FrameEventArgs e)
@@ -118,10 +118,46 @@ namespace gcgcg
         Exit();
       else if (e.Key == Key.E)
       {
+        camera.PanEsquerda();
+
         Console.WriteLine("--- Objetos / Pontos: ");
         for (var i = 0; i < objetosLista.Count; i++)
         {
           Console.WriteLine(objetosLista[i]);
+        }
+      }
+      else if (e.Key == Key.D)
+      {
+        camera.PanDireita();
+      }
+      else if (e.Key == Key.C)
+      {
+        camera.PanCima();
+      }
+      else if (e.Key == Key.B)
+      {
+        camera.PanBaixo();
+      }
+      else if (e.Key == Key.I)
+      {
+        if (camera.xmax - camera.xmin >= 300)
+        {
+          camera.ZoomIn();
+        }
+        else
+        {
+          Console.WriteLine("Limite de zoom in atingido");
+        }
+      }
+      else if (e.Key == Key.O)
+      {
+        if (camera.xmax - camera.xmin <= 700)
+        {
+          camera.ZoomOut();
+        }
+        else
+        {
+          Console.WriteLine("Limite de zoom out atingido");
         }
       }
 #if CG_Gizmo
