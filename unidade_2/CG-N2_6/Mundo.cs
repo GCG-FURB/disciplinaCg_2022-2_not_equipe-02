@@ -1,4 +1,4 @@
-﻿/**
+/**
   Autor: Dalton Solano dos Reis
 **/
 
@@ -180,25 +180,25 @@ namespace gcgcg
             else if(e.Key == Key.C && pontoSelecionado != null){
                 pontoSelecionado.Y = pontoSelecionado.Y + 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
+                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
             }
 
             else if(e.Key == Key.B && pontoSelecionado != null){
                 pontoSelecionado.Y = pontoSelecionado.Y - 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
+                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
             }
 
             else if(e.Key == Key.D && pontoSelecionado != null){
                 pontoSelecionado.X = pontoSelecionado.X + 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
+                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
             }
 
             else if(e.Key == Key.E && pontoSelecionado != null){
                 pontoSelecionado.X = pontoSelecionado.X - 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
+                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
             }
 
             else if(e.Key == Key.R){
@@ -206,7 +206,7 @@ namespace gcgcg
                 pto2.X = 100; pto2.Y = -100;
                 pto3.X = -100; pto3.Y = -100;
                 pto4.X = 100; pto4.Y = 100;
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
+                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
             }
 
             else if(e.Key == Key.Plus || e.Key == Key.KeypadPlus){

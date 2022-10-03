@@ -1,4 +1,4 @@
-﻿/**
+/**
   Autor: Dalton Solano dos Reis
 **/
 
@@ -37,19 +37,12 @@ namespace gcgcg
         private bool bBoxDesenhar = false;
         int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
         private bool mouseMoverPto = false;
+        private SegReta obj_seg_reta;
         private Ponto4D pto1;
         private Ponto4D pto2;
-        private Ponto4D pto3;
-        private Ponto4D pto4;
-        private Ponto4D pto5;
-        private SegReta sr1;
-        private SegReta sr2;
-        private SegReta sr3;
-        private Spline spline;
-
-        private Ponto4D pontoSelecionado;
-        private int indicePonto;
-        private int qtdPontosSpline;
+        private int raio;
+        private int angulo;
+        private double deslocamento;
 
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
@@ -60,45 +53,25 @@ namespace gcgcg
         {
             base.OnLoad(e);
 
-            camera.xmin = -400; camera.xmax = 400; camera.ymin = -400; camera.ymax = 400;
+            deslocamento = 0;
+            camera.xmin = -300; camera.xmax = 300; camera.ymin = -300; camera.ymax = 300;
 
             Console.WriteLine(" --- Ajuda / Teclas: ");
             Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
             objetoId = Utilitario.charProximo(objetoId);
 
- 
-            pto1 = new Ponto4D(-100, 100,0);
-            pto2 = new Ponto4D(100, -100,0);
-            pto3 = new Ponto4D(-100, -100,0);
-            pto4 = new Ponto4D(100, 100,0);
-            pto5 = new Ponto4D(0, 50, 0);
-            
-            sr1 = new SegReta(objetoId, null, pto1, pto3);
-            sr1.ObjetoCor.CorR = 0; sr1.ObjetoCor.CorG = 255; sr1.ObjetoCor.CorB = 255;
-            sr1.PrimitivaTipo = PrimitiveType.Lines;
-            sr1.PrimitivaTamanho = 2;
-            objetosLista.Add(sr1);
+            raio = 100;
+            angulo = 45;
+            pto1 = new Ponto4D(0, 0, 0);
+            pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+            obj_seg_reta = new SegReta(objetoId, null, pto1, pto2);
+            obj_seg_reta.ObjetoCor.CorR = 0; obj_seg_reta.ObjetoCor.CorG = 0; obj_seg_reta.ObjetoCor.CorB = 0;
+            obj_seg_reta.PrimitivaTipo = PrimitiveType.Lines;
+            obj_seg_reta.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_seg_reta);
+            objetoSelecionado = obj_seg_reta;
 
-            sr2 = new SegReta(objetoId, null, pto2, pto4);
-            sr2.ObjetoCor.CorR = 0; sr2.ObjetoCor.CorG = 255; sr2.ObjetoCor.CorB = 255;
-            sr2.PrimitivaTipo = PrimitiveType.LineStrip;
-            sr2.PrimitivaTamanho = 2;
-            objetosLista.Add(sr2);
-
-            sr3 = new SegReta(objetoId, null, pto1, pto4);
-            sr3.ObjetoCor.CorR = 0; sr3.ObjetoCor.CorG = 255; sr3.ObjetoCor.CorB = 255;
-            sr3.PrimitivaTipo = PrimitiveType.Lines;
-            sr3.PrimitivaTamanho = 2;
-            objetosLista.Add(sr3);
-
-            qtdPontosSpline = 10;
-            spline = new Spline(objetoId, null, pto2, pto5, pto3, qtdPontosSpline);
-            spline.ObjetoCor.CorR = 255; spline.ObjetoCor.CorG = 255; spline.ObjetoCor.CorB = 0;
-            spline.PrimitivaTipo = PrimitiveType.LineStrip;
-            spline.PrimitivaTamanho = 5;
-            objetosLista.Add(spline);
-            objetoSelecionado = spline;
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -152,76 +125,77 @@ namespace gcgcg
         {
             if (e.Key == Key.H)
                 Utilitario.AjudaTeclado();
-
-            else if(e.Key == Key.Number1){
-                objetoSelecionado = sr1;
-                pontoSelecionado = pto1;
-                indicePonto = 0;
-            }
-
-            else if(e.Key == Key.Number2){
-                objetoSelecionado = sr1;
-                pontoSelecionado = pto3;
-                indicePonto = 1;
-            }
-
-            else if(e.Key == Key.Number3){
-                objetoSelecionado = sr2;
-                pontoSelecionado = pto2;
-                indicePonto = 0;
-            }
-
-            else if(e.Key == Key.Number4){
-                objetoSelecionado = sr2;
-                pontoSelecionado = pto4;
-                indicePonto = 1;
-            }
-
-            else if(e.Key == Key.C && pontoSelecionado != null){
-                pontoSelecionado.Y = pontoSelecionado.Y + 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.B && pontoSelecionado != null){
-                pontoSelecionado.Y = pontoSelecionado.Y - 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.D && pontoSelecionado != null){
-                pontoSelecionado.X = pontoSelecionado.X + 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.E && pontoSelecionado != null){
-                pontoSelecionado.X = pontoSelecionado.X - 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.R){
-                pto1.X = -100; pto1.Y = 100;
-                pto2.X = 100; pto2.Y = -100;
-                pto3.X = -100; pto3.Y = -100;
-                pto4.X = 100; pto4.Y = 100;
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.Plus || e.Key == Key.KeypadPlus){
-                qtdPontosSpline++;
-            }
-
-            else if((e.Key == Key.Minus || e.Key == Key.KeypadMinus) && qtdPontosSpline > 5){
-                qtdPontosSpline--;
-            }
-
             else if (e.Key == Key.Escape)
                 Exit();
+            else if (e.Key == Key.Q)
+            {
+                deslocamento -= 5;
+                pto1.X = deslocamento;
+                pto1.Y = 0;
+                pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+                pto2.X += deslocamento;
 
+                objetoSelecionado.PontosAlterar(pto1, 0);
+                objetoSelecionado.PontosAlterar(pto2, 1);
+            }
+
+            else if (e.Key == Key.W)
+            {
+                deslocamento += 5;
+
+                pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+                pto2.X += deslocamento;
+
+                objetoSelecionado.PontosAlterar(pto1, 0);
+                objetoSelecionado.PontosAlterar(pto2, 1);
+            }
+
+            else if (e.Key == Key.Z)
+            {
+                angulo = angulo + 5;
+
+                pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+                pto2.X += deslocamento;
+
+                objetoSelecionado.PontosAlterar(pto1, 0);
+                objetoSelecionado.PontosAlterar(pto2, 1);
+            }
+
+            else if (e.Key == Key.X)
+            {
+                angulo = angulo - 5;
+
+                pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+                pto2.X += deslocamento;
+
+                objetoSelecionado.PontosAlterar(pto1, 0);
+                objetoSelecionado.PontosAlterar(pto2, 1);
+            }
+
+            else if (e.Key == Key.A && raio > 10)
+            {
+                raio = raio - 10;
+
+                pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+                pto2.X += deslocamento;
+
+                objetoSelecionado.PontosAlterar(pto1, 0);
+                objetoSelecionado.PontosAlterar(pto2, 1);
+            }
+
+            else if (e.Key == Key.S)
+            {
+                raio = raio + 10;
+                pto1.X = deslocamento;
+                pto1.Y = 0;
+                pto2 = Matematica.GerarPtosCirculo(angulo, raio);
+                pto2.X += deslocamento;
+
+                objetoSelecionado.PontosAlterar(pto1, 0);
+                objetoSelecionado.PontosAlterar(pto2, 1);
+            }
 #if CG_Gizmo
-            
+
 
 #endif
             else if (e.Key == Key.V)

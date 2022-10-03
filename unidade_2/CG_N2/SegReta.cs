@@ -11,14 +11,12 @@ using CG_Biblioteca;
 
 namespace gcgcg
 {
-  internal class Retangulo : ObjetoGeometria
+  internal class SegReta : ObjetoGeometria
   {
-    public Retangulo(char rotulo, Objeto paiRef, Ponto4D ptoInfEsq, Ponto4D ptoSupDir) : base(rotulo, paiRef)
+    public SegReta(char rotulo, Objeto paiRef, Ponto4D pto1, Ponto4D pto2) : base(rotulo, paiRef)
     {
-      base.PontosAdicionar(ptoInfEsq);
-      base.PontosAdicionar(new Ponto4D(ptoSupDir.X, ptoInfEsq.Y));
-      base.PontosAdicionar(ptoSupDir);
-      base.PontosAdicionar(new Ponto4D(ptoInfEsq.X, ptoSupDir.Y));
+      base.PontosAdicionar(pto1);
+      base.PontosAdicionar(pto2);
     }
 
     protected override void DesenharObjeto()
@@ -26,12 +24,9 @@ namespace gcgcg
 #if CG_OpenGL && !CG_DirectX
       GL.Begin(base.PrimitivaTipo);
       foreach (Ponto4D pto in pontosLista)
-      {      
+      {
         GL.Vertex2(pto.X, pto.Y);
-        GL.Color3(1,0.8,0.3);
       }
-
-
       GL.End();
 #elif CG_DirectX && !CG_OpenGL
     Console.WriteLine(" .. Coloque aqui o seu código em DirectX");

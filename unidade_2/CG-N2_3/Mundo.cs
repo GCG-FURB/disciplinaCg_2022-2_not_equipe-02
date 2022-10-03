@@ -37,20 +37,12 @@ namespace gcgcg
         private bool bBoxDesenhar = false;
         int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
         private bool mouseMoverPto = false;
-        private Ponto4D pto1;
-        private Ponto4D pto2;
-        private Ponto4D pto3;
-        private Ponto4D pto4;
-        private Ponto4D pto5;
-        private SegReta sr1;
-        private SegReta sr2;
-        private SegReta sr3;
-        private Spline spline;
-
-        private Ponto4D pontoSelecionado;
-        private int indicePonto;
-        private int qtdPontosSpline;
-
+        private Retangulo obj_Retangulo;
+        private CirculoPontoCentral obj_Circulo;
+        private SegReta obj_SegReta;
+        private Ponto4D pontoCentral1;
+        private Ponto4D pontoCentral2;
+        private Ponto4D pontoCentral3;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -60,45 +52,52 @@ namespace gcgcg
         {
             base.OnLoad(e);
 
-            camera.xmin = -400; camera.xmax = 400; camera.ymin = -400; camera.ymax = 400;
+            camera.xmin = -300; camera.xmax = 300; camera.ymin = -300; camera.ymax = 300;
 
             Console.WriteLine(" --- Ajuda / Teclas: ");
             Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-            objetoId = Utilitario.charProximo(objetoId);
+            objetoId = Utilitario.charProximo(objetoId);        
 
- 
-            pto1 = new Ponto4D(-100, 100,0);
-            pto2 = new Ponto4D(100, -100,0);
-            pto3 = new Ponto4D(-100, -100,0);
-            pto4 = new Ponto4D(100, 100,0);
-            pto5 = new Ponto4D(0, 50, 0);
-            
-            sr1 = new SegReta(objetoId, null, pto1, pto3);
-            sr1.ObjetoCor.CorR = 0; sr1.ObjetoCor.CorG = 255; sr1.ObjetoCor.CorB = 255;
-            sr1.PrimitivaTipo = PrimitiveType.Lines;
-            sr1.PrimitivaTamanho = 2;
-            objetosLista.Add(sr1);
+                        pontoCentral1 = new Ponto4D(0, 100);
+            pontoCentral2 = new Ponto4D(-100, -100);
+            pontoCentral3 = new Ponto4D(100, -100);
 
-            sr2 = new SegReta(objetoId, null, pto2, pto4);
-            sr2.ObjetoCor.CorR = 0; sr2.ObjetoCor.CorG = 255; sr2.ObjetoCor.CorB = 255;
-            sr2.PrimitivaTipo = PrimitiveType.LineStrip;
-            sr2.PrimitivaTamanho = 2;
-            objetosLista.Add(sr2);
+            obj_SegReta = new SegReta(objetoId, null, pontoCentral1, pontoCentral2);
+            obj_SegReta.ObjetoCor.CorR = 120; obj_SegReta.ObjetoCor.CorG = 219; obj_SegReta.ObjetoCor.CorB = 220;
+            obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+            obj_SegReta.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_SegReta);
 
-            sr3 = new SegReta(objetoId, null, pto1, pto4);
-            sr3.ObjetoCor.CorR = 0; sr3.ObjetoCor.CorG = 255; sr3.ObjetoCor.CorB = 255;
-            sr3.PrimitivaTipo = PrimitiveType.Lines;
-            sr3.PrimitivaTamanho = 2;
-            objetosLista.Add(sr3);
+            obj_SegReta = new SegReta(objetoId, null, pontoCentral2, pontoCentral3);
+            obj_SegReta.ObjetoCor.CorR = 120; obj_SegReta.ObjetoCor.CorG = 219; obj_SegReta.ObjetoCor.CorB = 220;
+            obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+            obj_SegReta.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_SegReta);
 
-            qtdPontosSpline = 10;
-            spline = new Spline(objetoId, null, pto2, pto5, pto3, qtdPontosSpline);
-            spline.ObjetoCor.CorR = 255; spline.ObjetoCor.CorG = 255; spline.ObjetoCor.CorB = 0;
-            spline.PrimitivaTipo = PrimitiveType.LineStrip;
-            spline.PrimitivaTamanho = 5;
-            objetosLista.Add(spline);
-            objetoSelecionado = spline;
+            obj_SegReta = new SegReta(objetoId, null, pontoCentral3, pontoCentral1);
+            obj_SegReta.ObjetoCor.CorR = 120; obj_SegReta.ObjetoCor.CorG = 219; obj_SegReta.ObjetoCor.CorB = 220;
+            obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+            obj_SegReta.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_SegReta);
+
+            obj_Circulo = new CirculoPontoCentral(objetoId, null, 100, 72, pontoCentral1);
+            obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
+            obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
+            obj_Circulo.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_Circulo);
+
+            obj_Circulo = new CirculoPontoCentral(objetoId, null, 100, 72, pontoCentral2);
+            obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
+            obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
+            obj_Circulo.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_Circulo);
+
+            obj_Circulo = new CirculoPontoCentral(objetoId, null, 100, 72, pontoCentral3);
+            obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
+            obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
+            obj_Circulo.PrimitivaTamanho = 5;
+            objetosLista.Add(obj_Circulo);
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -152,80 +151,31 @@ namespace gcgcg
         {
             if (e.Key == Key.H)
                 Utilitario.AjudaTeclado();
-
-            else if(e.Key == Key.Number1){
-                objetoSelecionado = sr1;
-                pontoSelecionado = pto1;
-                indicePonto = 0;
-            }
-
-            else if(e.Key == Key.Number2){
-                objetoSelecionado = sr1;
-                pontoSelecionado = pto3;
-                indicePonto = 1;
-            }
-
-            else if(e.Key == Key.Number3){
-                objetoSelecionado = sr2;
-                pontoSelecionado = pto2;
-                indicePonto = 0;
-            }
-
-            else if(e.Key == Key.Number4){
-                objetoSelecionado = sr2;
-                pontoSelecionado = pto4;
-                indicePonto = 1;
-            }
-
-            else if(e.Key == Key.C && pontoSelecionado != null){
-                pontoSelecionado.Y = pontoSelecionado.Y + 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.B && pontoSelecionado != null){
-                pontoSelecionado.Y = pontoSelecionado.Y - 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.D && pontoSelecionado != null){
-                pontoSelecionado.X = pontoSelecionado.X + 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.E && pontoSelecionado != null){
-                pontoSelecionado.X = pontoSelecionado.X - 10;
-                objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.R){
-                pto1.X = -100; pto1.Y = 100;
-                pto2.X = 100; pto2.Y = -100;
-                pto3.X = -100; pto3.Y = -100;
-                pto4.X = 100; pto4.Y = 100;
-                spline.CalculateSplinePoints(pto2, pto5, pto3, qtdPontosSpline);
-            }
-
-            else if(e.Key == Key.Plus || e.Key == Key.KeypadPlus){
-                qtdPontosSpline++;
-            }
-
-            else if((e.Key == Key.Minus || e.Key == Key.KeypadMinus) && qtdPontosSpline > 5){
-                qtdPontosSpline--;
-            }
-
             else if (e.Key == Key.Escape)
                 Exit();
-
+            else if (e.Key == Key.E && camera.xmax <= 600)
+            {
+                camera.PanEsquerda();
+            }
 #if CG_Gizmo
-            
+            else if (e.Key == Key.O && (camera.xmax <= 400 || camera.ymax <= 400))
+                camera.ZoomOut();
 
 #endif
             else if (e.Key == Key.V)
-                mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto            
+                mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto
+
+            else if (e.Key == Key.D && camera.xmin >= -600)
+                camera.PanDireita();
+
+            else if (e.Key == Key.C && camera.ymin >= -600)
+                camera.PanCima();
+
+            else if (e.Key == Key.B && camera.ymax <= 600)
+                camera.PanBaixo();
+
+            else if (e.Key == Key.I && (camera.xmax >= 100 || camera.ymax >= 100))
+                camera.ZoomIn();
 
             else
                 Console.WriteLine(" __ Tecla não implementada.");
