@@ -51,16 +51,9 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      int qtdePontosCirculo = 72;
-
-      objetoId = Utilitario.charProximo(objetoId);
-      obj_Circulo = new Circulo(objetoId, null, qtdePontosCirculo, 100);
-      obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
-      obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
-      obj_Circulo.PrimitivaTamanho = 5;
-
-      objetosLista.Add(obj_Circulo);
-      objetoSelecionado = obj_Circulo;
+      addCircle(72, 100, 0, 100);
+      addCircle(72, 100, 100, -100);
+      objetoSelecionado = addCircle(72, 100, -100, -100);
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -199,8 +192,22 @@ namespace gcgcg
       GL.End();
 #endif
     }
+
+    private Circulo addCircle(int qtdePontosCirculo, double raio, double deslocamentoX = 0, double deslocamentoY = 0)
+    {
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_Circulo = new Circulo(objetoId, null, qtdePontosCirculo, raio, deslocamentoX, deslocamentoY);
+      obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
+      obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
+      obj_Circulo.PrimitivaTamanho = 5;
+
+      objetosLista.Add(obj_Circulo);
+
+      return obj_Circulo;
+    }
 #endif    
   }
+
   class Program
   {
     static void Main(string[] args)

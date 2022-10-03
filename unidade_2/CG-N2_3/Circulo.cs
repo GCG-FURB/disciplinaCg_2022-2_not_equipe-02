@@ -11,7 +11,7 @@ namespace gcgcg
 {
   class Circulo : ObjetoGeometria
   {
-    public Circulo(char rotulo, Objeto paiRef, int qtdePontos, double raio) : base(rotulo, paiRef)
+    public Circulo(char rotulo, Objeto paiRef, int qtdePontos, double raio, double deslocamentoX = 0, double deslocamentoY = 0) : base(rotulo, paiRef)
     {
       Ponto4D ponto;
 
@@ -21,6 +21,16 @@ namespace gcgcg
       for (int i = 0; i < qtdePontos; i++)
       {
         ponto = Matematica.GerarPtosCirculo(angulo, raio);
+
+        if (deslocamentoX != 0)
+        {
+          ponto.X += deslocamentoX;
+        }
+
+        if (deslocamentoY != 0)
+        {
+          ponto.Y += deslocamentoY;
+        }
 
         base.PontosAdicionar(ponto);
 
