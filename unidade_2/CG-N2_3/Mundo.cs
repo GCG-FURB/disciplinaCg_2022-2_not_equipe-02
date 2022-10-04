@@ -38,6 +38,7 @@ namespace gcgcg
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
     private Circulo obj_Circulo;
+    private SegReta obj_SegReta;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -53,7 +54,30 @@ namespace gcgcg
 
       addCircle(72, 100, 0, 100);
       addCircle(72, 100, 100, -100);
-      objetoSelecionado = addCircle(72, 100, -100, -100);
+      addCircle(72, 100, -100, -100);
+
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_SegReta = new SegReta(objetoId, null, new Ponto4D(0, 100), new Ponto4D(100, -100));
+      obj_SegReta.ObjetoCor.CorR = 118; obj_SegReta.ObjetoCor.CorG = 249; obj_SegReta.ObjetoCor.CorB = 251;
+      obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+      objetosLista.Add(obj_SegReta);
+
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_SegReta = new SegReta(objetoId, null, new Ponto4D(0, 100), new Ponto4D(-100, -100));
+      obj_SegReta.ObjetoCor.CorR = 118; obj_SegReta.ObjetoCor.CorG = 249; obj_SegReta.ObjetoCor.CorB = 251;
+      obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+      obj_SegReta.PrimitivaTamanho = 5;
+      objetosLista.Add(obj_SegReta);
+
+      objetoId = Utilitario.charProximo(objetoId);
+      obj_SegReta = new SegReta(objetoId, null, new Ponto4D(-100, -100), new Ponto4D(100, -100));
+      obj_SegReta.ObjetoCor.CorR = 118; obj_SegReta.ObjetoCor.CorG = 249; obj_SegReta.ObjetoCor.CorB = 251;
+      obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+      obj_Circulo.PrimitivaTamanho = 5;
+      obj_SegReta.PrimitivaTamanho = 3;
+      objetosLista.Add(obj_SegReta);
+      objetoSelecionado = obj_SegReta;
+
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -71,7 +95,7 @@ namespace gcgcg
       objetoSelecionado = obj_Circulo;
 #endif
 #if CG_OpenGL
-      GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+      GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 #endif
     }
     protected override void OnUpdateFrame(FrameEventArgs e)
