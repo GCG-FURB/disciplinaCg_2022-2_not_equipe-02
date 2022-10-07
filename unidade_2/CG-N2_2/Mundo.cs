@@ -53,7 +53,7 @@ namespace gcgcg
             Console.WriteLine(" --- Ajuda / Teclas: ");
             Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-            objetoId = Utilitario.charProximo(objetoId);        
+            objetoId = Utilitario.charProximo(objetoId);
 
             obj_Circulo = new Circulo(objetoId, null, 100, 72);
             obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
@@ -118,7 +118,7 @@ namespace gcgcg
                 Exit();
             else if (e.Key == Key.E && camera.xmax <= 600)
             {
-                camera.PanEsquerda();
+                camera.PanDireita();
             }
 #if CG_Gizmo
             else if (e.Key == Key.O && (camera.xmax <= 400 || camera.ymax <= 400))
@@ -129,13 +129,13 @@ namespace gcgcg
                 mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto
 
             else if (e.Key == Key.D && camera.xmin >= -600)
-                camera.PanDireita();
+                camera.PanEsquerda();
 
             else if (e.Key == Key.C && camera.ymin >= -600)
-                camera.PanCima();
+                camera.PanBaixo();
 
             else if (e.Key == Key.B && camera.ymax <= 600)
-                camera.PanBaixo();
+                camera.PanCima();
 
             else if (e.Key == Key.I && (camera.xmax >= 100 || camera.ymax >= 100))
                 camera.ZoomIn();

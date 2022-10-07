@@ -14,21 +14,20 @@ namespace gcgcg
 {
     internal class Spline : ObjetoGeometria
     {
-        public Spline(char rotulo, Objeto paiRef, Ponto4D ptoEsq, Ponto4D ptoCentro, Ponto4D ptoDir, int qtdPontos) : base(rotulo, paiRef)
+        public Spline(char rotulo, Objeto paiRef,Ponto4D ptoCimaEsq, Ponto4D ptoCimaDir, Ponto4D ptoBaixoEsc, Ponto4D ptoBaixoDir, int qtdPontos) : base(rotulo, paiRef)
         {
-            CalculateSplinePoints(ptoEsq, ptoCentro, ptoDir, qtdPontos);
+            CalculateSplinePoints(ptoCimaEsq, ptoCimaDir, ptoBaixoEsc, ptoBaixoDir, qtdPontos);
         }
 
-        public void CalculateSplinePoints(Ponto4D ptoEsq, Ponto4D ptoCentro, Ponto4D ptoDir, int qtdPontos)
+        public void CalculateSplinePoints(Ponto4D ptoCimaEsq, Ponto4D ptoCimaDir, Ponto4D ptoBaixoEsc, Ponto4D ptoBaixoDir, int qtdPontos)
         {
             base.PontosRemoverTodos();
             double t = 1.0 / qtdPontos;
 
             for (double i = 0; i <= 1; i += t)
             {
-                //funcao bezier P(t) = P0*t^2 + P1*2*t*(1-t) + P2*(1-t)^2
-                double x = (ptoEsq.X * Math.Pow(i, 2)) + (ptoCentro.X * 2 * i * (1 - i)) + (ptoDir.X * Math.Pow(1 - i, 2));
-                double y = (ptoEsq.Y * Math.Pow(i, 2)) + (ptoCentro.Y * 2 * i * (1 - i)) + (ptoDir.Y * Math.Pow(1 - i, 2));
+                double x = (Math.Pow((1 - i), 3) * ptoCimaEsq.X) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.X) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.X) + (Math.Pow(i, 3) * ptoBaixoDir.X);
+                double y = (Math.Pow((1 - i), 3) * ptoCimaEsq.Y) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Y) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.Y) + (Math.Pow(i, 3) * ptoBaixoDir.Y);
                 base.PontosAdicionar(new Ponto4D(x, y, 0));
             }
         }

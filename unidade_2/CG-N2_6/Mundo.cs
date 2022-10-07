@@ -41,7 +41,6 @@ namespace gcgcg
         private Ponto4D pto2;
         private Ponto4D pto3;
         private Ponto4D pto4;
-        private Ponto4D pto5;
         private SegReta sr1;
         private SegReta sr2;
         private SegReta sr3;
@@ -67,13 +66,12 @@ namespace gcgcg
 
             objetoId = Utilitario.charProximo(objetoId);
 
- 
-            pto1 = new Ponto4D(-100, 100,0);
-            pto2 = new Ponto4D(100, -100,0);
-            pto3 = new Ponto4D(-100, -100,0);
-            pto4 = new Ponto4D(100, 100,0);
-            pto5 = new Ponto4D(0, 50, 0);
-            
+
+            pto1 = new Ponto4D(-100, 100, 0);
+            pto2 = new Ponto4D(100, -100, 0);
+            pto3 = new Ponto4D(-100, -100, 0);
+            pto4 = new Ponto4D(100, 100, 0);
+
             sr1 = new SegReta(objetoId, null, pto1, pto3);
             sr1.ObjetoCor.CorR = 0; sr1.ObjetoCor.CorG = 255; sr1.ObjetoCor.CorB = 255;
             sr1.PrimitivaTipo = PrimitiveType.Lines;
@@ -93,7 +91,7 @@ namespace gcgcg
             objetosLista.Add(sr3);
 
             qtdPontosSpline = 10;
-            spline = new Spline(objetoId, null, pto2, pto5, pto3, qtdPontosSpline);
+            spline = new Spline(objetoId, null, pto3, pto1, pto4, pto2, qtdPontosSpline);
             spline.ObjetoCor.CorR = 255; spline.ObjetoCor.CorG = 255; spline.ObjetoCor.CorB = 0;
             spline.PrimitivaTipo = PrimitiveType.LineStrip;
             spline.PrimitivaTamanho = 5;
@@ -153,75 +151,88 @@ namespace gcgcg
             if (e.Key == Key.H)
                 Utilitario.AjudaTeclado();
 
-            else if(e.Key == Key.Number1){
+            else if (e.Key == Key.Number1)
+            {
                 objetoSelecionado = sr1;
                 pontoSelecionado = pto1;
                 indicePonto = 0;
             }
 
-            else if(e.Key == Key.Number2){
+            else if (e.Key == Key.Number2)
+            {
                 objetoSelecionado = sr1;
                 pontoSelecionado = pto3;
                 indicePonto = 1;
             }
 
-            else if(e.Key == Key.Number3){
+            else if (e.Key == Key.Number3)
+            {
                 objetoSelecionado = sr2;
                 pontoSelecionado = pto2;
                 indicePonto = 0;
             }
 
-            else if(e.Key == Key.Number4){
+            else if (e.Key == Key.Number4)
+            {
                 objetoSelecionado = sr2;
                 pontoSelecionado = pto4;
                 indicePonto = 1;
             }
 
-            else if(e.Key == Key.C && pontoSelecionado != null){
+            else if (e.Key == Key.C && pontoSelecionado != null)
+            {
                 pontoSelecionado.Y = pontoSelecionado.Y + 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
-            else if(e.Key == Key.B && pontoSelecionado != null){
+            else if (e.Key == Key.B && pontoSelecionado != null)
+            {
                 pontoSelecionado.Y = pontoSelecionado.Y - 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
-            else if(e.Key == Key.D && pontoSelecionado != null){
+            else if (e.Key == Key.D && pontoSelecionado != null)
+            {
                 pontoSelecionado.X = pontoSelecionado.X + 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
-            else if(e.Key == Key.E && pontoSelecionado != null){
+            else if (e.Key == Key.E && pontoSelecionado != null)
+            {
                 pontoSelecionado.X = pontoSelecionado.X - 10;
                 objetoSelecionado.PontosAlterar(pontoSelecionado, indicePonto);
-                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
-            else if(e.Key == Key.R){
+            else if (e.Key == Key.R)
+            {
                 pto1.X = -100; pto1.Y = 100;
                 pto2.X = 100; pto2.Y = -100;
                 pto3.X = -100; pto3.Y = -100;
                 pto4.X = 100; pto4.Y = 100;
-                spline.UpdateSpline(pto2, pto5, pto3, qtdPontosSpline);
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
-            else if(e.Key == Key.Plus || e.Key == Key.KeypadPlus){
+            else if (e.Key == Key.Plus || e.Key == Key.KeypadPlus)
+            {
                 qtdPontosSpline++;
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
-            else if((e.Key == Key.Minus || e.Key == Key.KeypadMinus) && qtdPontosSpline > 5){
+            else if ((e.Key == Key.Minus || e.Key == Key.KeypadMinus) && qtdPontosSpline > 5)
+            {
                 qtdPontosSpline--;
+                spline.CalculateSplinePoints(pto3, pto1, pto4, pto2, qtdPontosSpline);
             }
 
             else if (e.Key == Key.Escape)
                 Exit();
 
 #if CG_Gizmo
-            
+
 
 #endif
             else if (e.Key == Key.V)
