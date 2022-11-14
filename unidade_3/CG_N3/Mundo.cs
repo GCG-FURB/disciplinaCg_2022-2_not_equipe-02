@@ -270,14 +270,16 @@ namespace gcgcg
             GL.End();
         }
 #endif
-    }
-    class Program
+
+  }
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Mundo window = Mundo.GetInstance(600, 600);
-            window.Title = "CG_N3";
-            window.Run(1.0 / 60.0);
-        }
+      ToolkitOptions.Default.EnableHighResolution = false;
+      Mundo window = Mundo.GetInstance(600, 600);
+      window.Title = "CG_N3";
+      window.Run(1.0 / 60.0);
     }
+}
 }
