@@ -33,6 +33,10 @@ namespace gcgcg
       pontosLista.RemoveAt(pontosLista.Count - 1);
     }
 
+    public List<Ponto4D> Pontos(){
+      return pontosLista;
+    }
+
     protected void PontosRemoverTodos()
     {
       pontosLista.Clear();
