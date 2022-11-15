@@ -119,30 +119,35 @@ namespace gcgcg
             else if (e.Key == Key.O)
                 bBoxDesenhar = !bBoxDesenhar;
 
-              else if(e.Key == Key.S){ // questão 7
-                    foreach(Objeto obj in objetosLista){ // filtra pela bbox
-                        if((mouseX >= obj.BBox.obterMenorX) && (mouseX <= obj.BBox.obterMaiorX) && 
-                        (mouseY >= obj.BBox.obterMenorY) && (mouseY <= obj.BBox.obterMaiorY)){ // verifica se o ponto é interno à ela
-                            // verificar scan line
-                        }
-                    }                  
+            else if (e.Key == Key.S)
+            { // questão 7
+                objetoSelecionado = null;
+                foreach (Objeto obj in objetosLista)
+                { // filtra pela bbox
+                    SelectObject(obj);
                 }
+            }
             else if (e.Key == Key.Enter)
             {
-                if (objetoNovo != null)
-                {
-                    objetoNovo.PontosRemoverUltimo();   // N3-Exe6: "truque" para deixar o rastro
-                    objetoSelecionado = objetoNovo;
-                    objetoNovo = null;
-                }
 
                 // questão 3
                 if (lastPressedKey == Key.P)
                 {
                     objetoSelecionado.PontosAlterar(new Ponto4D(mouseX, mouseY), indexPonto);
                 }
+                else if (lastPressedKey == Key.A)
+                {
+                    objetoSelecionado.FilhoAdicionar(objetoNovo);
+                }
+
+                if (objetoNovo != null)
+                {
+                    objetoNovo.PontosRemoverUltimo();   // N3-Exe6: "truque" para deixar o rastro
+                    objetoSelecionado = objetoNovo;
+                    objetoNovo = null;
+                }
             }
-            else if (e.Key == Key.Space)
+            else if (e.Key == Key.Space) // questão 5
             {
                 if (objetoNovo == null)
                 {
@@ -159,25 +164,32 @@ namespace gcgcg
             {
                 if (e.Key == Key.M)
                     Console.WriteLine(objetoSelecionado.Matriz);
+                else if (e.Key == Key.D) // questão 2
+                {
+                    objetosLista.Remove(objetoSelecionado);
+                }
                 else if (e.Key == Key.P) // questão 3
                 {
                     Ponto4D mouse = new Ponto4D(mouseX, mouseY);
                     indexPonto = GetClosestPoint(mouse);
                     lastPressedKey = Key.P;
                 }
-                else if(e.Key == Key.R){ // questão 6
+                else if (e.Key == Key.R) // questão 6
+                {
                     objetoSelecionado.ObjetoCor.CorR = 255;
                     objetoSelecionado.ObjetoCor.CorG = 0;
                     objetoSelecionado.ObjetoCor.CorB = 0;
                 }
 
-                else if(e.Key == Key.G){ // questão 6
+                else if (e.Key == Key.G)// questão 6
+                {
                     objetoSelecionado.ObjetoCor.CorR = 0;
                     objetoSelecionado.ObjetoCor.CorG = 255;
                     objetoSelecionado.ObjetoCor.CorB = 0;
                 }
 
-                else if(e.Key == Key.B){ // questão 6
+                else if (e.Key == Key.B) // questão 6
+                {
                     objetoSelecionado.ObjetoCor.CorR = 0;
                     objetoSelecionado.ObjetoCor.CorG = 0;
                     objetoSelecionado.ObjetoCor.CorB = 255;
@@ -186,32 +198,48 @@ namespace gcgcg
                 else if (e.Key == Key.I)
                     objetoSelecionado.AtribuirIdentidade();
                 //TODO: não está atualizando a BBox com as transformações geométricas
-                else if (e.Key == Key.Left)
+                else if (e.Key == Key.Left) // questão 8
                     objetoSelecionado.TranslacaoXYZ(-10, 0, 0);
-                else if (e.Key == Key.Right)
+                else if (e.Key == Key.Right) // questão 8
                     objetoSelecionado.TranslacaoXYZ(10, 0, 0);
-                else if (e.Key == Key.Up)
+                else if (e.Key == Key.Up) // questão 8
                     objetoSelecionado.TranslacaoXYZ(0, 10, 0);
-                else if (e.Key == Key.Down)
+                else if (e.Key == Key.Down) // questão 8
                     objetoSelecionado.TranslacaoXYZ(0, -10, 0);
-                else if (e.Key == Key.PageUp)
+                else if (e.Key == Key.PageUp) // questão 9
                     objetoSelecionado.EscalaXYZ(2, 2, 2);
-                else if (e.Key == Key.PageDown)
+                else if (e.Key == Key.PageDown) // questão 9
                     objetoSelecionado.EscalaXYZ(0.5, 0.5, 0.5);
-                else if (e.Key == Key.Home)
+                else if (e.Key == Key.Home) // questão 9
                     objetoSelecionado.EscalaXYZBBox(0.5, 0.5, 0.5);
-                else if (e.Key == Key.End)
+                else if (e.Key == Key.End) // questão 9
                     objetoSelecionado.EscalaXYZBBox(2, 2, 2);
-                else if (e.Key == Key.Number1)
+                else if (e.Key == Key.Number1) // questão 10
                     objetoSelecionado.Rotacao(10);
-                else if (e.Key == Key.Number2)
+                else if (e.Key == Key.Number2) // questão 10
                     objetoSelecionado.Rotacao(-10);
-                else if (e.Key == Key.Number3)
+                else if (e.Key == Key.Number3) // questão 10
                     objetoSelecionado.RotacaoZBBox(10);
-                else if (e.Key == Key.Number4)
+                else if (e.Key == Key.Number4) // questão 10
                     objetoSelecionado.RotacaoZBBox(-10);
                 else if (e.Key == Key.Number9)
-                    objetoSelecionado = null;                     // desmacar objeto selecionado
+                    objetoSelecionado = null; // desmacar objeto selecionado
+                else if (e.Key == Key.A) // questão 11
+                {
+                    lastPressedKey = Key.A;
+                    if (objetoNovo == null)
+                    {
+                        objetoId = Utilitario.charProximo(objetoId);
+                        objetoNovo = new Poligono(objetoId, null);
+                        objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+                        objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));  // N3-Exe6: "troque" para deixar o rastro
+                    }
+                    else
+                    {
+                        objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+                    }
+                }
+
                 else
                     Console.WriteLine(" __ Tecla não implementada.");
             }
@@ -235,6 +263,29 @@ namespace gcgcg
                 }
             }
             return point;
+        }
+
+        private void SelectObject(Objeto obj)
+        {
+            if ((mouseX >= obj.BBox.obterMenorX) && (mouseX <= obj.BBox.obterMaiorX) &&
+                    (mouseY >= obj.BBox.obterMenorY) && (mouseY <= obj.BBox.obterMaiorY))
+            { // verifica se o ponto é interno à ela
+                objetoSelecionado = (ObjetoGeometria)obj;
+                bBoxDesenhar = true;
+
+            }
+
+            if (objetoSelecionado == null)
+            {
+                foreach (Objeto filho in obj.Filhos())
+                {
+                    if (objetoSelecionado == null)
+                    {
+                        SelectObject(filho);
+                    }
+                }
+            }
+
         }
 
         private double getDistance(Ponto4D pt1, Ponto4D pt2)
@@ -271,15 +322,15 @@ namespace gcgcg
         }
 #endif
 
-  }
-  class Program
-  {
-    static void Main(string[] args)
-    {
-      ToolkitOptions.Default.EnableHighResolution = false;
-      Mundo window = Mundo.GetInstance(600, 600);
-      window.Title = "CG_N3";
-      window.Run(1.0 / 60.0);
     }
-}
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ToolkitOptions.Default.EnableHighResolution = false;
+            Mundo window = Mundo.GetInstance(600, 600);
+            window.Title = "CG_N3";
+            window.Run(1.0 / 60.0);
+        }
+    }
 }

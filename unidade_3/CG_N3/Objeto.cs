@@ -61,6 +61,11 @@ namespace gcgcg
     {
       this.objetosLista.Remove(filho);
     }
+
+    public List<Objeto> Filhos(){
+      return this.objetosLista;
+    }
+
     public void AtribuirIdentidade()
     {
       matriz.AtribuirIdentidade();
