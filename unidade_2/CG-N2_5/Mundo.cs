@@ -37,8 +37,10 @@ namespace gcgcg
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
-    private Retangulo obj_Retangulo;
     private SegReta obj_SegReta;
+    private int radius;
+    private int angle;
+    private int displacement;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -47,18 +49,25 @@ namespace gcgcg
     protected override void OnLoad(EventArgs e)
     {
       base.OnLoad(e);
-      camera.xmin = -400; camera.xmax = 400; camera.ymin = -400; camera.ymax = 400;
+      camera.xmin = -300; camera.xmax = 300; camera.ymin = -300; camera.ymax = 300;
 
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
+      Ponto4D lineStart = new Ponto4D(0, 0, 0);
+
+      angle = 45;
+      radius = 100;
+      displacement = 0;
+      Ponto4D lineEnd = Matematica.GerarPtosCirculo(angle, radius);
+
       objetoId = Utilitario.charProximo(objetoId);
-      obj_Retangulo = new Retangulo(objetoId, null, new Ponto4D(-200, -200, 0), new Ponto4D(200, 200, 0));
-      obj_Retangulo.ObjetoCor = new Cor(255, 0, 255, 255);
-      objetosLista.Add(obj_Retangulo);
-      objetoSelecionado = obj_Retangulo;
-      obj_Retangulo.PrimitivaTipo = PrimitiveType.Points;
-      obj_Retangulo.PrimitivaTamanho = 4;
+      obj_SegReta = new SegReta(objetoId, null, lineStart, lineEnd);
+      obj_SegReta.ObjetoCor = new Cor(0, 0, 0, 255);
+      obj_SegReta.PrimitivaTipo = PrimitiveType.Lines;
+      obj_SegReta.PrimitivaTamanho = 5;
+      objetosLista.Add(obj_SegReta);
+      objetoSelecionado = obj_SegReta;
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -158,18 +167,29 @@ namespace gcgcg
           Console.WriteLine("Limite de zoom out atingido");
         }
       }
-      else if (e.Key == Key.Space)
+      else if (e.Key == Key.Q)
       {
-        if (objetoSelecionado.PrimitivaTipo == PrimitiveType.Polygon)
-        {
-          objetoSelecionado.PrimitivaTipo = 0;
-        }
-        else
-        {
-          objetoSelecionado.PrimitivaTipo += 1;
-        }
-
-        Console.WriteLine("PrimitivaTipo: " + objetoSelecionado.PrimitivaTipo);
+        MoveLineInX(objetoSelecionado, -5);
+      }
+      else if (e.Key == Key.W)
+      {
+        MoveLineInX(objetoSelecionado, 5);
+      }
+      else if (e.Key == Key.A)
+      {
+        ChangeLineSize(objetoSelecionado, -5);
+      }
+      else if (e.Key == Key.S)
+      {
+        ChangeLineSize(objetoSelecionado, 5);
+      }
+      else if (e.Key == Key.Z)
+      {
+        // changeLineAngle(objetoSelecionado, -5);
+      }
+      else if (e.Key == Key.X)
+      {
+        // changeLineAngle(objetoSelecionado, 5);
       }
 #if CG_Gizmo
       else if (e.Key == Key.O)
@@ -179,6 +199,35 @@ namespace gcgcg
         mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto
       else
         Console.WriteLine(" __ Tecla não implementada.");
+
+      Console.WriteLine("line: " + objetoSelecionado);
+    }
+
+    private void MoveLineInX(ObjetoGeometria line, int displacement)
+    {
+      Ponto4D lineEnd = line.PontosUltimo();
+      lineEnd.X += displacement;
+      line.PontosRemoverUltimo();
+
+      Ponto4D lineStart = line.PontosUltimo();
+      lineStart.X += displacement;
+      line.PontosRemoverUltimo();
+
+      line.PontosAdicionar(lineStart);
+      line.PontosAdicionar(lineEnd);
+
+      this.displacement += displacement;
+    }
+
+    private void ChangeLineSize(ObjetoGeometria line, int changeInSize)
+    {
+      line.PontosRemoverUltimo();
+
+      radius += changeInSize;
+      Ponto4D newLineEnd = Matematica.GerarPtosCirculo(angle, radius);
+      newLineEnd.X += this.displacement;
+
+      line.PontosAdicionar(newLineEnd);
     }
 
     //TODO: não está considerando o NDC
