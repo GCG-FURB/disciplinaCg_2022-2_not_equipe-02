@@ -64,7 +64,7 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      Draw();
+      DrawScene();
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -86,7 +86,7 @@ namespace gcgcg
 #endif
     }
 
-    private void Draw()
+    private void DrawScene()
     {
       bool isInitilization = objetosLista.Count <= 0;
       if (isInitilization)
@@ -239,7 +239,7 @@ namespace gcgcg
       point.X += displacementInX;
       point.Y += displacementInY;
 
-      Draw();
+      DrawScene();
     }
 
     //TODO: não está considerando o NDC
