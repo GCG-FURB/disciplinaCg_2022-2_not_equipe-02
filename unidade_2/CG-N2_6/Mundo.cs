@@ -38,18 +38,18 @@ namespace gcgcg
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
 
-    private Ponto4D ponto1;
-    private Ponto4D ponto2;
-    private Ponto4D ponto3;
-    private Ponto4D ponto4;
+    private Ponto4D point1;
+    private Ponto4D point2;
+    private Ponto4D point3;
+    private Ponto4D point4;
 
     private SegReta segReta1;
     private SegReta segReta2;
     private SegReta segReta3;
 
-    private Ponto4D pontoSelecionado;
+    private Ponto4D selectedPoint;
 
-    private int qtdePontosSpline;
+    private int qtySplinePoint;
     private Spline spline;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
@@ -64,40 +64,7 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      ponto1 = new Ponto4D(-100, -100, 0);
-      ponto2 = new Ponto4D(-100, 100, 0);
-      ponto3 = new Ponto4D(100, 100, 0);
-      ponto4 = new Ponto4D(100, -100, 0);
-
-      objetoId = Utilitario.charProximo(objetoId);
-      segReta1 = new SegReta(objetoId, null, ponto1, ponto2);
-      segReta1.ObjetoCor = new Cor(0, 255, 255, 255);
-      segReta1.PrimitivaTipo = PrimitiveType.Lines;
-      segReta1.PrimitivaTamanho = 2;
-      objetosLista.Add(segReta1);
-
-      objetoId = Utilitario.charProximo(objetoId);
-      segReta2 = new SegReta(objetoId, null, ponto2, ponto3);
-      segReta2.ObjetoCor = new Cor(0, 255, 255, 255);
-      segReta2.PrimitivaTipo = PrimitiveType.Lines;
-      segReta2.PrimitivaTamanho = 2;
-      objetosLista.Add(segReta2);
-
-      objetoId = Utilitario.charProximo(objetoId);
-      segReta3 = new SegReta(objetoId, null, ponto3, ponto4);
-      segReta3.ObjetoCor = new Cor(0, 255, 255, 255);
-      segReta3.PrimitivaTipo = PrimitiveType.Lines;
-      segReta3.PrimitivaTamanho = 2;
-      objetosLista.Add(segReta3);
-
-      qtdePontosSpline = 10;
-      objetoId = Utilitario.charProximo(objetoId);
-      spline = new Spline(objetoId, null, ponto1, ponto2, ponto3, ponto4, qtdePontosSpline);
-      spline.ObjetoCor = new Cor(255, 255, 0, 255);
-      spline.PrimitivaTipo = PrimitiveType.LineStrip;
-      spline.PrimitivaTamanho = 5;
-      objetosLista.Add(spline);
-      objetoSelecionado = spline;
+      Draw();
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -117,6 +84,52 @@ namespace gcgcg
 #if CG_OpenGL
       GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 #endif
+    }
+
+    private void Draw()
+    {
+      bool isInitilization = objetosLista.Count <= 0;
+      if (isInitilization)
+      {
+        point1 = new Ponto4D(-100, -100, 0);
+        point2 = new Ponto4D(-100, 100, 0);
+        point3 = new Ponto4D(100, 100, 0);
+        point4 = new Ponto4D(100, -100, 0);
+
+        selectedPoint = point1;
+      }
+
+      objetosLista = new List<Objeto>();
+
+      objetoId = Utilitario.charProximo(objetoId);
+      segReta1 = new SegReta(objetoId, null, point1, point2);
+      segReta1.ObjetoCor = new Cor(0, 255, 255, 255);
+      segReta1.PrimitivaTipo = PrimitiveType.Lines;
+      segReta1.PrimitivaTamanho = 2;
+      objetosLista.Add(segReta1);
+
+      objetoId = Utilitario.charProximo(objetoId);
+      segReta2 = new SegReta(objetoId, null, point2, point3);
+      segReta2.ObjetoCor = new Cor(0, 255, 255, 255);
+      segReta2.PrimitivaTipo = PrimitiveType.Lines;
+      segReta2.PrimitivaTamanho = 2;
+      objetosLista.Add(segReta2);
+
+      objetoId = Utilitario.charProximo(objetoId);
+      segReta3 = new SegReta(objetoId, null, point3, point4);
+      segReta3.ObjetoCor = new Cor(0, 255, 255, 255);
+      segReta3.PrimitivaTipo = PrimitiveType.Lines;
+      segReta3.PrimitivaTamanho = 2;
+      objetosLista.Add(segReta3);
+
+      qtySplinePoint = 10;
+      objetoId = Utilitario.charProximo(objetoId);
+      spline = new Spline(objetoId, null, point1, point2, point3, point4, qtySplinePoint);
+      spline.ObjetoCor = new Cor(255, 255, 0, 255);
+      spline.PrimitivaTipo = PrimitiveType.LineStrip;
+      spline.PrimitivaTamanho = 5;
+      objetosLista.Add(spline);
+      objetoSelecionado = spline;
     }
     protected override void OnUpdateFrame(FrameEventArgs e)
     {
@@ -155,25 +168,19 @@ namespace gcgcg
         Exit();
       else if (e.Key == Key.E)
       {
-        camera.PanEsquerda();
-
-        Console.WriteLine("--- Objetos / Pontos: ");
-        for (var i = 0; i < objetosLista.Count; i++)
-        {
-          Console.WriteLine(objetosLista[i]);
-        }
+        MovePoint(selectedPoint, -5, 0);
       }
       else if (e.Key == Key.D)
       {
-        camera.PanDireita();
+        MovePoint(selectedPoint, 5, 0);
       }
       else if (e.Key == Key.C)
       {
-        camera.PanCima();
+        MovePoint(selectedPoint, 0, 5);
       }
       else if (e.Key == Key.B)
       {
-        camera.PanBaixo();
+        MovePoint(selectedPoint, 0, -5);
       }
       else if (e.Key == Key.I)
       {
@@ -197,6 +204,26 @@ namespace gcgcg
           Console.WriteLine("Limite de zoom out atingido");
         }
       }
+      else if (e.Key == Key.Number1)
+      {
+        objetoSelecionado = segReta1;
+        selectedPoint = point1;
+      }
+      else if (e.Key == Key.Number2)
+      {
+        objetoSelecionado = segReta1;
+        selectedPoint = point2;
+      }
+      else if (e.Key == Key.Number3)
+      {
+        objetoSelecionado = segReta2;
+        selectedPoint = point3;
+      }
+      else if (e.Key == Key.Number4)
+      {
+        objetoSelecionado = segReta3;
+        selectedPoint = point4;
+      }
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
@@ -205,6 +232,14 @@ namespace gcgcg
         mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto
       else
         Console.WriteLine(" __ Tecla não implementada.");
+    }
+
+    private void MovePoint(Ponto4D point, int displacementInX, int displacementInY)
+    {
+      point.X += displacementInX;
+      point.Y += displacementInY;
+
+      Draw();
     }
 
     //TODO: não está considerando o NDC
@@ -245,7 +280,7 @@ namespace gcgcg
     static void Main(string[] args)
     {
       Mundo window = Mundo.GetInstance(600, 600);
-      window.Title = "CG_N2_4";
+      window.Title = "CG_N2_6";
       window.Run(1.0 / 60.0);
     }
   }
