@@ -64,7 +64,7 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      DrawScene();
+      DrawScene(true);
 
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
@@ -86,10 +86,10 @@ namespace gcgcg
 #endif
     }
 
-    private void DrawScene()
+    private void DrawScene(bool shouldStartFromBeginning = false)
     {
       bool isInitilization = objetosLista.Count <= 0;
-      if (isInitilization)
+      if (shouldStartFromBeginning)
       {
         point1 = new Ponto4D(-100, -100, 0);
         point2 = new Ponto4D(-100, 100, 0);
@@ -97,6 +97,7 @@ namespace gcgcg
         point4 = new Ponto4D(100, -100, 0);
 
         selectedPoint = point1;
+        qtySplinePoint = 10;
       }
 
       objetosLista = new List<Objeto>();
@@ -122,7 +123,6 @@ namespace gcgcg
       segReta3.PrimitivaTamanho = 2;
       objetosLista.Add(segReta3);
 
-      qtySplinePoint = 10;
       objetoId = Utilitario.charProximo(objetoId);
       spline = new Spline(objetoId, null, point1, point2, point3, point4, qtySplinePoint);
       spline.ObjetoCor = new Cor(255, 255, 0, 255);
@@ -182,6 +182,18 @@ namespace gcgcg
       {
         MovePoint(selectedPoint, 0, -5);
       }
+      else if (e.Key == Key.R)
+      {
+        DrawScene(true);
+      }
+      else if (e.Key == Key.Plus || e.Key == Key.KeypadPlus)
+      {
+        IncSplinePoints(1);
+      }
+      else if (e.Key == Key.Minus || e.Key == Key.KeypadMinus)
+      {
+        IncSplinePoints(-1);
+      }
       else if (e.Key == Key.I)
       {
         if (camera.xmax - camera.xmin >= 300)
@@ -240,6 +252,23 @@ namespace gcgcg
       point.Y += displacementInY;
 
       DrawScene();
+    }
+
+    private bool IncSplinePoints(int pointIncrease)
+    {
+      if (pointIncrease < 0 && qtySplinePoint <= 2)
+      {
+        return false;
+      }
+      else if (pointIncrease > 1 && qtySplinePoint >= 15)
+      {
+        return false;
+      }
+
+      this.qtySplinePoint += pointIncrease;
+      spline.CalculateSplinePoints(point1, point2, point3, point4, qtySplinePoint);
+
+      return true;
     }
 
     //TODO: não está considerando o NDC
