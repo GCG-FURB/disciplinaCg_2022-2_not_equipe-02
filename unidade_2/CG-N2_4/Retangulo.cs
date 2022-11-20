@@ -28,6 +28,7 @@ namespace gcgcg
       foreach (Ponto4D pto in pontosLista)
       {
         GL.Vertex2(pto.X, pto.Y);
+        GL.Color3(0.2, 0.5, 0.9);
       }
       GL.End();
 #elif CG_DirectX && !CG_OpenGL
@@ -36,7 +37,7 @@ namespace gcgcg
     Console.WriteLine(" .. ERRO de Render - escolha OpenGL ou DirectX !!");
 #endif
     }
-    
+
     //TODO: melhorar para exibir não só a lista de pontos (geometria), mas também a topologia ... poderia ser listado estilo OBJ da Wavefrom
 #if CG_Debug
     public override string ToString()
