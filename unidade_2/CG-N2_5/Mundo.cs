@@ -185,11 +185,11 @@ namespace gcgcg
       }
       else if (e.Key == Key.Z)
       {
-        // changeLineAngle(objetoSelecionado, -5);
+        ChangeLineAngle(objetoSelecionado, -5);
       }
       else if (e.Key == Key.X)
       {
-        // changeLineAngle(objetoSelecionado, 5);
+        ChangeLineAngle(objetoSelecionado, 5);
       }
 #if CG_Gizmo
       else if (e.Key == Key.O)
@@ -225,6 +225,17 @@ namespace gcgcg
 
       radius += changeInSize;
       Ponto4D newLineEnd = Matematica.GerarPtosCirculo(angle, radius);
+      newLineEnd.X += this.displacement;
+
+      line.PontosAdicionar(newLineEnd);
+    }
+
+    private void ChangeLineAngle(ObjetoGeometria line, int changeInAngle)
+    {
+      line.PontosRemoverUltimo();
+
+      this.angle += changeInAngle;
+      Ponto4D newLineEnd = Matematica.GerarPtosCirculo(this.angle, this.radius);
       newLineEnd.X += this.displacement;
 
       line.PontosAdicionar(newLineEnd);
