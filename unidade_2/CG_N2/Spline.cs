@@ -23,13 +23,16 @@ namespace gcgcg
         {
             base.PontosRemoverTodos();
             double t = 1.0 / qtdPontos;
-
-            for (double i = 0; i <= 1; i += t)
+            double x, y;
+            for (double i = 0; i <= 1; i += t)  
             {
-                double x = (Math.Pow((1 - i), 3) * ptoCimaEsq.X) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.X) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.X) + (Math.Pow(i, 3) * ptoBaixoDir.X);
-                double y = (Math.Pow((1 - i), 3) * ptoCimaEsq.Y) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Y) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.Y) + (Math.Pow(i, 3) * ptoBaixoDir.Y);
+                x = (Math.Pow((1 - i), 3) * ptoCimaEsq.X) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.X) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.X) + (Math.Pow(i, 3) * ptoBaixoDir.X);
+                y = (Math.Pow((1 - i), 3) * ptoCimaEsq.Y) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Y) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.Y) + (Math.Pow(i, 3) * ptoBaixoDir.Y);
                 base.PontosAdicionar(new Ponto4D(x, y, 0));
             }
+            x = ptoBaixoDir.X;
+            y = ptoBaixoDir.Y;
+            base.PontosAdicionar(new Ponto4D(x, y, 0));
         }
 
         protected override void DesenharObjeto()
