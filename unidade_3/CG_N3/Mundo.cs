@@ -55,8 +55,8 @@ namespace gcgcg
 
       Poligono poligon = new Poligono(objetoId, null);
       poligon.PontosAdicionar(new Ponto4D(50, 50));
-      poligon.PontosAdicionar(new Ponto4D(350, 50));
       poligon.PontosAdicionar(new Ponto4D(350, 350));
+      poligon.PontosAdicionar(new Ponto4D(350, 50));
       poligon.PontosAdicionar(new Ponto4D(50, 350));
 
       objetosLista.Add(poligon);
@@ -165,7 +165,7 @@ namespace gcgcg
     {
       Console.WriteLine("Mouse X: " + mouseX);
       Console.WriteLine("Mouse Y: " + mouseY);
-      bool foundAnObject = selectObject(this.mouseX, this.mouseY);
+      bool foundAnObject = DidSelectAnObject(this.mouseX, this.mouseY);
 
       if (!foundAnObject)
       {
@@ -173,25 +173,116 @@ namespace gcgcg
       }
     }
 
-    private bool selectObject(int mouseX, int mouseY)
+    private bool DidSelectAnObject(int mouseX, int mouseY)
     {
+      Ponto4D clickPoint = new Ponto4D(mouseX, mouseY);
+
+      ObjetoGeometria objetoGeometria;
+
       foreach (Objeto objeto in objetosLista)
       {
-        if
-        (
-          (mouseX >= objeto.BBox.obterMenorX) && (mouseX <= objeto.BBox.obterMaiorX)
-          &&
-          (mouseY >= objeto.BBox.obterMenorY) && (mouseY <= objeto.BBox.obterMaiorY)
-        )
+        objetoGeometria = (ObjetoGeometria)objeto;
+
+        if (IsPointInsideObject(objetoGeometria, clickPoint))
         {
           bBoxDesenhar = true;
           objeto.BBox.Desenhar();
-
           return true;
         }
       }
 
       return false;
+    }
+
+    private bool IsPointInsideObject(ObjetoGeometria objetoGeometria, Ponto4D clickPoint)
+    {
+      int qtyIntersections = 0;
+
+      Ponto4D intersectionPoint, objCurrentVertex, objNextVertex;
+
+      for (int i = 0; i < objetoGeometria.pontosLista.Count; i++)
+      {
+        if (i == (objetoGeometria.pontosLista.Count - 1)) // no ultimo indice, current é o ultimo elemento e next é o primeiro
+        {
+          objCurrentVertex = objetoGeometria.pontosLista[i];
+          objNextVertex = objetoGeometria.pontosLista[0];
+        }
+        else
+        {
+          objCurrentVertex = objetoGeometria.pontosLista[i];
+          objNextVertex = objetoGeometria.pontosLista[i + 1];
+        }
+
+        if (objCurrentVertex.Y != objNextVertex.Y)
+        {
+          intersectionPoint = GetIntersectionPointWithLineL(clickPoint, objCurrentVertex, objNextVertex);
+
+          if (intersectionPoint == null)
+          { // não faz interseccao na horizontal com esse lado em questao
+            continue;
+          }
+
+          else if (intersectionPoint.X == clickPoint.X)
+          { //Ponto sobre um dos lados
+            return true;
+          }
+
+
+          else if (intersectionPoint.X > clickPoint.X) // a interseccao esta a direita?
+          {
+            qtyIntersections++;
+          }
+
+        }
+        else if
+        (
+          clickPoint.Y == objCurrentVertex.Y
+          && clickPoint.X >= Math.Min(objCurrentVertex.X, objNextVertex.X)
+          && clickPoint.X <= Math.Max(objCurrentVertex.X, objNextVertex.X)
+        ) // ponto selecionado está sobre o lado horizontal
+        {
+          return true;
+        }
+      }
+
+      Console.WriteLine("Intersections: " + qtyIntersections);
+
+      if (qtyIntersections % 2 == 1)
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    private Ponto4D GetIntersectionPointWithLineL(Ponto4D clickPoint, Ponto4D point1, Ponto4D point2)
+    {
+      if (clickPoint.Y > Math.Max(point1.Y, point2.Y))
+      {
+        return null;
+      }
+
+      if (clickPoint.Y < Math.Min(point1.Y, point2.Y))
+      {
+        return null;
+      }
+
+      double y = clickPoint.Y;
+
+      double x = GetIntersectionXGivenIntersectionYAnd2PointsOfTheLine(point1, point2, y);
+
+      return new Ponto4D(x, y);
+    }
+
+    private double GetIntersectionXGivenIntersectionYAnd2PointsOfTheLine(Ponto4D point1, Ponto4D point2, double y)
+    {
+      double x1 = point1.X;
+      double y1 = point1.Y;
+
+      double x2 = point2.X;
+      double y2 = point2.Y;
+
+      return ((x1 * y2) + (x2 * y) + (-1 * y1 * x2) + (-1 * x1 * y)) / (y2 - y1);
     }
 
 #if CG_Gizmo

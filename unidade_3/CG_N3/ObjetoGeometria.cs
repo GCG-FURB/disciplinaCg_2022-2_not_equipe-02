@@ -11,7 +11,7 @@ namespace gcgcg
 {
   internal abstract class ObjetoGeometria : Objeto
   {
-    protected List<Ponto4D> pontosLista = new List<Ponto4D>();
+    public List<Ponto4D> pontosLista { get; } = new List<Ponto4D>();
 
     public ObjetoGeometria(char rotulo, Objeto paiRef) : base(rotulo, paiRef) { }
 
