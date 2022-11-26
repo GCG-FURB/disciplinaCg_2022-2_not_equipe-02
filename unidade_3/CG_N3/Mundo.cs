@@ -186,6 +186,7 @@ namespace gcgcg
         if (IsPointInsideObject(objetoGeometria, clickPoint))
         {
           bBoxDesenhar = true;
+          objetoSelecionado = objetoGeometria;
           objeto.BBox.Desenhar();
           return true;
         }
