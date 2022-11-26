@@ -143,7 +143,12 @@ namespace gcgcg
       }
       else if (e.Key == Key.B)
       {
-        DrawBBoxOnSelectedObject(objetoSelecionado);
+        ObjetoGeometria objetoGeometria = SelectObjectByXandY(mouseX, mouseY);
+        DrawBBoxOnSelectedObject(objetoGeometria);
+      }
+      else if (e.Key == Key.V)
+      {
+
       }
 #if CG_Gizmo
       else if (e.Key == Key.O)
@@ -170,7 +175,7 @@ namespace gcgcg
     {
       Console.WriteLine("Mouse X: " + mouseX);
       Console.WriteLine("Mouse Y: " + mouseY);
-      ObjetoGeometria selectedObjectOrNull = SelectObjectByClick(this.mouseX, this.mouseY);
+      ObjetoGeometria selectedObjectOrNull = SelectObjectByXandY(this.mouseX, this.mouseY);
 
       if (selectedObjectOrNull != null)
       {
@@ -194,8 +199,6 @@ namespace gcgcg
       bBoxDesenhar = !bBoxDesenhar;
 
       objetoGeometria.BBox.Desenhar();
-
-      Console.WriteLine("Bounding box: " + (bBoxDesenhar ? "On" : "Off"));
     }
 
     private int GetClosestPoint(Ponto4D pt)
@@ -221,7 +224,7 @@ namespace gcgcg
       return Math.Sqrt(Math.Pow((pt1.X - pt2.X), 2) + Math.Pow((pt1.Y - pt2.Y), 2));
     }
 
-    private ObjetoGeometria SelectObjectByClick(int mouseX, int mouseY)
+    private ObjetoGeometria SelectObjectByXandY(int mouseX, int mouseY)
     {
       Ponto4D clickPoint = new Ponto4D(mouseX, mouseY);
 
