@@ -37,7 +37,8 @@ namespace gcgcg
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
     private bool mouseMoverPto = false;
-    private int qtySplinePoint;
+    private bool moveAPointOn = false;
+    private bool selectVertexOn = false;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -140,6 +141,10 @@ namespace gcgcg
           Console.WriteLine("Limite de zoom out atingido");
         }
       }
+      else if (e.Key == Key.B)
+      {
+        DrawBBoxOnSelectedObject(objetoSelecionado);
+      }
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
@@ -165,15 +170,58 @@ namespace gcgcg
     {
       Console.WriteLine("Mouse X: " + mouseX);
       Console.WriteLine("Mouse Y: " + mouseY);
-      bool foundAnObject = DidSelectAnObject(this.mouseX, this.mouseY);
+      ObjetoGeometria selectedObjectOrNull = SelectObjectByClick(this.mouseX, this.mouseY);
 
-      if (!foundAnObject)
+      if (selectedObjectOrNull != null)
       {
-        bBoxDesenhar = false;
+        ObjetoGeometria selectedObject = selectedObjectOrNull;
+        objetoSelecionado = selectedObject;
+      }
+      else
+      {
+        objetoSelecionado = null;
       }
     }
 
-    private bool DidSelectAnObject(int mouseX, int mouseY)
+    private void DrawBBoxOnSelectedObject(ObjetoGeometria objetoGeometria)
+    {
+      if (objetoGeometria == null)
+      {
+        bBoxDesenhar = false;
+        return;
+      }
+
+      bBoxDesenhar = !bBoxDesenhar;
+
+      objetoGeometria.BBox.Desenhar();
+
+      Console.WriteLine("Bounding box: " + (bBoxDesenhar ? "On" : "Off"));
+    }
+
+    private int GetClosestPoint(Ponto4D pt)
+    {
+      double lowestDistance = Double.MaxValue;
+      int point = -1;
+
+
+      for (int i = 0; i < objetoSelecionado.pontosLista.Count; i++)
+      {
+        double distance = getDistance(pt, objetoSelecionado.pontosLista[i]);
+        if (distance <= lowestDistance)
+        {
+          lowestDistance = distance;
+          point = i;
+        }
+      }
+      return point;
+    }
+
+    private double getDistance(Ponto4D pt1, Ponto4D pt2)
+    {
+      return Math.Sqrt(Math.Pow((pt1.X - pt2.X), 2) + Math.Pow((pt1.Y - pt2.Y), 2));
+    }
+
+    private ObjetoGeometria SelectObjectByClick(int mouseX, int mouseY)
     {
       Ponto4D clickPoint = new Ponto4D(mouseX, mouseY);
 
@@ -185,14 +233,11 @@ namespace gcgcg
 
         if (IsPointInsideObject(objetoGeometria, clickPoint))
         {
-          bBoxDesenhar = true;
-          objetoSelecionado = objetoGeometria;
-          objeto.BBox.Desenhar();
-          return true;
+          return objetoGeometria;
         }
       }
 
-      return false;
+      return null;
     }
 
     private bool IsPointInsideObject(ObjetoGeometria objetoGeometria, Ponto4D clickPoint)
