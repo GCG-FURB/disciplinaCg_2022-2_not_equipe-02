@@ -36,9 +36,8 @@ namespace gcgcg
     private char objetoId = '@';
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
-    private bool mouseMoverPto = false;
     private bool moveAPointOn = false;
-    private bool selectVertexOn = false;
+    private Ponto4D selectedVertex = null;
 #if CG_Privado
     private Privado_SegReta obj_SegReta;
     private Privado_Circulo obj_Circulo;
@@ -143,19 +142,30 @@ namespace gcgcg
       }
       else if (e.Key == Key.B)
       {
-        ObjetoGeometria objetoGeometria = SelectObjectByXandY(mouseX, mouseY);
-        DrawBBoxOnSelectedObject(objetoGeometria);
+        SwitchBBoxDrawState(objetoSelecionado);
       }
       else if (e.Key == Key.V)
       {
-
+        if (objetoSelecionado == null)
+        {
+          Console.WriteLine("Selecione um objeto para então poder mover seus vértices");
+        }
+        else
+        {
+          if (selectedVertex == null)
+          {
+            selectedVertex = GetIndexOfClosestVertexOfGivenObject(new Ponto4D(mouseX, mouseY), objetoSelecionado);
+          }
+          else
+          {
+            selectedVertex = null;
+          }
+        }
       }
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
 #endif
-      else if (e.Key == Key.V)
-        mouseMoverPto = !mouseMoverPto;   //TODO: falta atualizar a BBox do objeto
       else
         Console.WriteLine(" __ Tecla não implementada.");
     }
@@ -164,56 +174,51 @@ namespace gcgcg
     protected override void OnMouseMove(MouseMoveEventArgs e)
     {
       mouseX = e.Position.X; mouseY = 600 - e.Position.Y; // Inverti eixo Y
-      if (mouseMoverPto && (objetoSelecionado != null))
+      if (selectedVertex != null)
       {
-        objetoSelecionado.PontosUltimo().X = mouseX;
-        objetoSelecionado.PontosUltimo().Y = mouseY;
+        selectedVertex.X = mouseX;
+        selectedVertex.Y = mouseY;
       }
     }
 
     protected override void OnMouseDown(MouseButtonEventArgs e)
     {
-      Console.WriteLine("Mouse X: " + mouseX);
+      mouseY = 600 - e.Position.Y; // Inverti eixo Y
+      Console.WriteLine("Mouse X: " + e.X);
       Console.WriteLine("Mouse Y: " + mouseY);
-      ObjetoGeometria selectedObjectOrNull = SelectObjectByXandY(this.mouseX, this.mouseY);
+      objetoSelecionado = SelectObjectByXandY(e.X, mouseY);
 
-      if (selectedObjectOrNull != null)
+      if (objetoSelecionado != null && bBoxDesenhar)
       {
-        ObjetoGeometria selectedObject = selectedObjectOrNull;
-        objetoSelecionado = selectedObject;
-      }
-      else
-      {
-        objetoSelecionado = null;
+        objetoSelecionado.BBox.Desenhar();
       }
     }
 
-    private void DrawBBoxOnSelectedObject(ObjetoGeometria objetoGeometria)
+    private void SwitchBBoxDrawState(ObjetoGeometria objetoGeometria)
     {
-      if (objetoGeometria == null)
-      {
-        bBoxDesenhar = false;
-        return;
-      }
-
       bBoxDesenhar = !bBoxDesenhar;
 
-      objetoGeometria.BBox.Desenhar();
+      if (bBoxDesenhar && objetoSelecionado != null)
+      {
+        objetoSelecionado.BBox.Desenhar();
+      }
     }
 
-    private int GetClosestPoint(Ponto4D pt)
+    private Ponto4D GetIndexOfClosestVertexOfGivenObject(Ponto4D coordinate, ObjetoGeometria objeto)
     {
       double lowestDistance = Double.MaxValue;
-      int point = -1;
+      Ponto4D point = objeto.pontosLista[0];
 
+      double distance;
 
       for (int i = 0; i < objetoSelecionado.pontosLista.Count; i++)
       {
-        double distance = getDistance(pt, objetoSelecionado.pontosLista[i]);
+        distance = getDistance(coordinate, objetoSelecionado.pontosLista[i]);
+
         if (distance <= lowestDistance)
         {
           lowestDistance = distance;
-          point = i;
+          point = objetoSelecionado.pontosLista[i];
         }
       }
       return point;
@@ -228,15 +233,11 @@ namespace gcgcg
     {
       Ponto4D clickPoint = new Ponto4D(mouseX, mouseY);
 
-      ObjetoGeometria objetoGeometria;
-
       foreach (Objeto objeto in objetosLista)
       {
-        objetoGeometria = (ObjetoGeometria)objeto;
-
-        if (IsPointInsideObject(objetoGeometria, clickPoint))
+        if (IsPointInsideObject((ObjetoGeometria)objeto, clickPoint))
         {
-          return objetoGeometria;
+          return (ObjetoGeometria)objeto;
         }
       }
 
