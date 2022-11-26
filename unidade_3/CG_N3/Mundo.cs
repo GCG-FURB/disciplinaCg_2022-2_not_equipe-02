@@ -51,6 +51,18 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
+      objetoId = Utilitario.charProximo(objetoId);
+
+      Poligono poligon = new Poligono(objetoId, null);
+      poligon.PontosAdicionar(new Ponto4D(50, 50));
+      poligon.PontosAdicionar(new Ponto4D(350, 50));
+      poligon.PontosAdicionar(new Ponto4D(350, 350));
+      poligon.PontosAdicionar(new Ponto4D(50, 350));
+
+      objetosLista.Add(poligon);
+
+      objetoSelecionado = poligon;
+
 #if CG_Privado
       objetoId = Utilitario.charProximo(objetoId);
       obj_SegReta = new Privado_SegReta(objetoId, null, new Ponto4D(50, 150), new Ponto4D(150, 250));
@@ -149,6 +161,39 @@ namespace gcgcg
       }
     }
 
+    protected override void OnMouseDown(MouseButtonEventArgs e)
+    {
+      Console.WriteLine("Mouse X: " + mouseX);
+      Console.WriteLine("Mouse Y: " + mouseY);
+      bool foundAnObject = selectObject(this.mouseX, this.mouseY);
+
+      if (!foundAnObject)
+      {
+        bBoxDesenhar = false;
+      }
+    }
+
+    private bool selectObject(int mouseX, int mouseY)
+    {
+      foreach (Objeto objeto in objetosLista)
+      {
+        if
+        (
+          (mouseX >= objeto.BBox.obterMenorX) && (mouseX <= objeto.BBox.obterMaiorX)
+          &&
+          (mouseY >= objeto.BBox.obterMenorY) && (mouseY <= objeto.BBox.obterMaiorY)
+        )
+        {
+          bBoxDesenhar = true;
+          objeto.BBox.Desenhar();
+
+          return true;
+        }
+      }
+
+      return false;
+    }
+
 #if CG_Gizmo
     private void Sru3D()
     {
@@ -177,7 +222,7 @@ namespace gcgcg
     {
       ToolkitOptions.Default.EnableHighResolution = false;
       Mundo window = Mundo.GetInstance(600, 600);
-      window.Title = "CG_N2_6";
+      window.Title = "CG_N3";
       window.Run(1.0 / 60.0);
     }
   }
