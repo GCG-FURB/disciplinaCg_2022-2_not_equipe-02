@@ -46,7 +46,7 @@ namespace gcgcg
     protected override void OnLoad(EventArgs e)
     {
       base.OnLoad(e);
-      camera.xmin = -400; camera.xmax = 400; camera.ymin = -400; camera.ymax = 400;
+      camera.xmin = 0; camera.xmax = 600; camera.ymin = 0; camera.ymax = 600;
 
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
