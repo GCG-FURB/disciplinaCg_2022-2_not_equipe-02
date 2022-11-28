@@ -65,13 +65,44 @@ namespace gcgcg
     {
       this.objetosLista.Remove(filho);
     }
+    public void AtribuirIdentidade()
+    {
+      matriz.AtribuirIdentidade();
+    }
+    public void TranslacaoXYZ(double tx, double ty, double tz)
+    {
+      Transformacao4D matrizTranslate = new Transformacao4D();
+      matrizTranslate.AtribuirTranslacao(tx, ty, tz);
+      matriz = matrizTranslate.MultiplicarMatriz(matriz);
+    }
 
     public void Rotacao(double angulo)
     {
       RotacaoEixo(angulo);
       matriz = matrizTmpRotacao.MultiplicarMatriz(matriz);
     }
+    public void EscalaXYZ(double Sx, double Sy, double Sz)
+    {
+      Transformacao4D matrizScale = new Transformacao4D();
+      matrizScale.AtribuirEscala(Sx, Sy, Sz);
+      matriz = matrizScale.MultiplicarMatriz(matriz);
+    }
+    public void EscalaXYZBBox(double Sx, double Sy, double Sz)
+    {
+      matrizGlobal.AtribuirIdentidade();
+      Ponto4D pontoPivo = bBox.obterCentro;
 
+      matrizTmpTranslacao.AtribuirTranslacao(-pontoPivo.X, -pontoPivo.Y, -pontoPivo.Z); // Inverter sinal
+      matrizGlobal = matrizTmpTranslacao.MultiplicarMatriz(matrizGlobal);
+
+      matrizTmpEscala.AtribuirEscala(Sx, Sy, Sz);
+      matrizGlobal = matrizTmpEscala.MultiplicarMatriz(matrizGlobal);
+
+      matrizTmpTranslacaoInversa.AtribuirTranslacao(pontoPivo.X, pontoPivo.Y, pontoPivo.Z);
+      matrizGlobal = matrizTmpTranslacaoInversa.MultiplicarMatriz(matrizGlobal);
+
+      matriz = matriz.MultiplicarMatriz(matrizGlobal);
+    }
     public void RotacaoEixo(double angulo)
     {
       switch (eixoRotacao)

@@ -192,6 +192,8 @@ namespace gcgcg
         objetoNovo = null;
         selectedVertex = null;
       }
+      else if (e.Key == Key.R)
+        objetoSelecionado.AtribuirIdentidade();
       else if (e.Key == Key.Number1)
         objetoSelecionado.Rotacao(10);
       else if (e.Key == Key.Number2)
@@ -200,6 +202,30 @@ namespace gcgcg
         objetoSelecionado.RotacaoZBBox(10);
       else if (e.Key == Key.Number4)
         objetoSelecionado.RotacaoZBBox(-10);
+      else if (e.Key == Key.Left) // questão 8
+        objetoSelecionado.TranslacaoXYZ(-10, 0, 0);
+      else if (e.Key == Key.Right) // questão 8
+        objetoSelecionado.TranslacaoXYZ(10, 0, 0);
+      else if (e.Key == Key.Up) // questão 8
+        objetoSelecionado.TranslacaoXYZ(0, 10, 0);
+      else if (e.Key == Key.Down) // questão 8
+        objetoSelecionado.TranslacaoXYZ(0, -10, 0);
+      else if (e.Key == Key.PageUp) // questão 9
+        objetoSelecionado.EscalaXYZ(2, 2, 2);
+      else if (e.Key == Key.PageDown) // questão 9
+        objetoSelecionado.EscalaXYZ(0.5, 0.5, 0.5);
+      else if (e.Key == Key.Home) // questão 9
+        objetoSelecionado.EscalaXYZBBox(0.5, 0.5, 0.5);
+      else if (e.Key == Key.End) // questão 9
+        objetoSelecionado.EscalaXYZBBox(2, 2, 2);
+      else if (e.Key == Key.E)
+      {
+        Console.WriteLine("--- Objetos / Pontos: ");
+        for (var i = 0; i < objetosLista.Count; i++)
+        {
+          Console.WriteLine(objetosLista[i]);
+        }
+      }
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
