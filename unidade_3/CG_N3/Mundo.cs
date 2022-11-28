@@ -33,6 +33,7 @@ namespace gcgcg
     private CameraOrtho camera = new CameraOrtho();
     protected List<Objeto> objetosLista = new List<Objeto>();
     private ObjetoGeometria objetoSelecionado = null;
+    private ObjetoGeometria objetoNovo = null;
     private char objetoId = '@';
     private bool bBoxDesenhar = false;
     int mouseX, mouseY;   //TODO: achar método MouseDown para não ter variável Global
@@ -154,7 +155,7 @@ namespace gcgcg
         {
           if (selectedVertex == null)
           {
-            selectedVertex = GetIndexOfClosestVertexOfGivenObject(new Ponto4D(mouseX, mouseY), objetoSelecionado);
+            selectedVertex = GetClosestVertexOfGivenObject(new Ponto4D(mouseX, mouseY), objetoSelecionado);
           }
           else
           {
@@ -162,6 +163,43 @@ namespace gcgcg
           }
         }
       }
+      else if (e.Key == Key.Space) // questão 5
+      {
+        bool isCreatingAPoligon = objetoNovo != null;
+        if (isCreatingAPoligon)
+        {
+          objetoNovo.PontosRemoverUltimo();
+          objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+          objetoNovo.PontosAdicionar(selectedVertex);
+        }
+        else
+        {
+          objetoId = Utilitario.charProximo(objetoId);
+          objetoNovo = new Poligono(objetoId, null);
+          objetoNovo.PontosAdicionar(new Ponto4D(mouseX, mouseY));
+
+          Ponto4D newVertex = new Ponto4D(mouseX, mouseY);
+          selectedVertex = newVertex;
+          objetoNovo.PontosAdicionar(newVertex);
+
+          objetosLista.Add(objetoNovo);
+          objetoSelecionado = objetoNovo;
+        }
+      }
+      else if (e.Key == Key.Enter)
+      {
+        objetoNovo.PontosRemoverUltimo();
+        objetoNovo = null;
+        selectedVertex = null;
+      }
+      else if (e.Key == Key.Number1)
+        objetoSelecionado.Rotacao(10);
+      else if (e.Key == Key.Number2)
+        objetoSelecionado.Rotacao(-10);
+      else if (e.Key == Key.Number3)
+        objetoSelecionado.RotacaoZBBox(10);
+      else if (e.Key == Key.Number4)
+        objetoSelecionado.RotacaoZBBox(-10);
 #if CG_Gizmo
       else if (e.Key == Key.O)
         bBoxDesenhar = !bBoxDesenhar;
@@ -204,7 +242,7 @@ namespace gcgcg
       }
     }
 
-    private Ponto4D GetIndexOfClosestVertexOfGivenObject(Ponto4D coordinate, ObjetoGeometria objeto)
+    private Ponto4D GetClosestVertexOfGivenObject(Ponto4D coordinate, ObjetoGeometria objeto)
     {
       double lowestDistance = Double.MaxValue;
       Ponto4D point = objeto.pontosLista[0];
