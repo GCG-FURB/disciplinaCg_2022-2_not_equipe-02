@@ -60,8 +60,11 @@ namespace gcgcg
 
       objetoId = Utilitario.charProximo(objetoId);
       obj_Cubo = new Cubo(objetoId, null);
-      objetosLista.Add(obj_Cubo);
+      objetosLista.Add(obj_Cubo);      
       objetoSelecionado = obj_Cubo;
+      objetoSelecionado.ObjetoCor.CorR =  40;
+      objetoSelecionado.ObjetoCor.CorG =  40;
+      objetoSelecionado.ObjetoCor.CorB =  40;
       const double LARGURA_CHAO = 10;
       const double PROFUNDIDADE_CHAO = 12;
       Objeto objeto_escala = (Objeto) objetoSelecionado;
@@ -69,7 +72,16 @@ namespace gcgcg
       objeto_escala.Translacao(LARGURA_CHAO/2, 'x');
       objeto_escala.Translacao(-0.5, 'y');
       objeto_escala.Translacao(PROFUNDIDADE_CHAO/2, 'z');
-
+      
+      
+      objetoId = Utilitario.charProximo(objetoId);
+      objetoSelecionado = new Cubo(objetoId, null);
+      objetosLista.Add(objetoSelecionado);
+      objetoSelecionado.ObjetoCor.CorR =  255;
+      objetoSelecionado.ObjetoCor.CorG =  255;
+      objetoSelecionado.ObjetoCor.CorB =  255;
+     
+      
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
       obj_Cilindro = new Cilindro(objetoId, null);
@@ -170,7 +182,7 @@ namespace gcgcg
     protected override void OnMouseMove(MouseMoveEventArgs e)
     {
     }
-    
+
 #if CG_Gizmo
     private void Sru3D()
     {
