@@ -13,7 +13,8 @@ namespace gcgcg
   class Mundo : GameWindow
   {
     private static Mundo instanciaMundo = null;
-
+    private float fovy, aspect, near, far;
+    private Vector3 eye, at, up;
     private Mundo(int width, int height) : base(width, height) { }
 
     public static Mundo GetInstance(int width, int height)
@@ -42,7 +43,18 @@ namespace gcgcg
     protected override void OnLoad(EventArgs e)
     {
       base.OnLoad(e);
-
+      GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+      GL.Enable(EnableCap.DepthTest);
+      GL.Enable(EnableCap.CullFace);
+  // ___ parâmetros da câmera sintética
+      fovy = (float)Math.PI / 4;
+      aspect = Width / (float)Height;
+      near = 1.0f;
+      far = 50.0f;
+      eye = new Vector3(20, 30, 20);
+      at = new Vector3(0, 0, 0);
+      up = new Vector3(0, 1, 0);
+      
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
@@ -50,6 +62,13 @@ namespace gcgcg
       obj_Cubo = new Cubo(objetoId, null);
       objetosLista.Add(obj_Cubo);
       objetoSelecionado = obj_Cubo;
+      const double LARGURA_CHAO = 10;
+      const double PROFUNDIDADE_CHAO = 12;
+      Objeto objeto_escala = (Objeto) objetoSelecionado;
+      objeto_escala.EscalaXYZBBox(LARGURA_CHAO, 1, PROFUNDIDADE_CHAO);
+      objeto_escala.Translacao(LARGURA_CHAO/2, 'x');
+      objeto_escala.Translacao(-0.5, 'y');
+      objeto_escala.Translacao(PROFUNDIDADE_CHAO/2, 'z');
 
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
@@ -80,8 +99,7 @@ namespace gcgcg
       base.OnResize(e);
 
       GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
-
-      Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(camera.Fovy, Width / (float)Height, camera.Near, camera.Far);
+      Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, near, far);
       GL.MatrixMode(MatrixMode.Projection);
       GL.LoadMatrix(ref projection);
     }
@@ -94,7 +112,7 @@ namespace gcgcg
     {
       base.OnRenderFrame(e);
       GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-      Matrix4 modelview = Matrix4.LookAt(camera.Eye, camera.At, camera.Up);
+      Matrix4 modelview = Matrix4.LookAt(eye, at, up);
       GL.MatrixMode(MatrixMode.Modelview);
       GL.LoadMatrix(ref modelview);
 #if CG_Gizmo      
@@ -152,7 +170,7 @@ namespace gcgcg
     protected override void OnMouseMove(MouseMoveEventArgs e)
     {
     }
-
+    
 #if CG_Gizmo
     private void Sru3D()
     {
