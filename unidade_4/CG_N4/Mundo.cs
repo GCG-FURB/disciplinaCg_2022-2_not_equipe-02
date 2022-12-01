@@ -74,7 +74,7 @@ namespace gcgcg
       objetosLista.Add(spline);
 
       const double COMPRIMENTO_ARESTA_DADO = 5;
-      objetosLista.Add(Dice(COMPRIMENTO_ARESTA_DADO));
+      objetoSelecionado.FilhoAdicionar(Dice(COMPRIMENTO_ARESTA_DADO));
 
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
@@ -279,6 +279,9 @@ namespace gcgcg
       else if (e.Key == Key.Number6)
       {
         eye = new Vector3(1, -20, 1);
+      }
+      else if (e.Key == Key.Space){
+        //spline.TranslacaoXYZ(objetoSelecionado.Pontos()[10].X, objetoSelecionado.Pontos()[10].Y, objetoSelecionado.Pontos()[10].Z);
       }
 
       else

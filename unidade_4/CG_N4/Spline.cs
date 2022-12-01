@@ -14,26 +14,27 @@ namespace gcgcg
 {
     internal class Spline : ObjetoGeometria
     {
-        public Spline(char rotulo, Objeto paiRef,Ponto4D ptoCimaEsq, Ponto4D ptoCimaDir, Ponto4D ptoBaixoEsc, Ponto4D ptoBaixoDir, int qtdPontos) : base(rotulo, paiRef)
+        public Spline(char rotulo, Objeto paiRef, Ponto4D ptBaixoDir, Ponto4D ptoCimaDir, Ponto4D ptCimaEsq, Ponto4D ptBaixoEsq, int qtdPontos) : base(rotulo, paiRef)
         {
-            CalculateSplinePoints(ptoCimaEsq, ptoCimaDir, ptoBaixoEsc, ptoBaixoDir, qtdPontos);
+            CalculateSplinePoints(ptBaixoDir, ptoCimaDir, ptCimaEsq, ptBaixoEsq, qtdPontos);
         }
 
-        public void CalculateSplinePoints(Ponto4D ptoCimaEsq, Ponto4D ptoCimaDir, Ponto4D ptoBaixoEsc, Ponto4D ptoBaixoDir, int qtdPontos)
+        public void CalculateSplinePoints(Ponto4D ptBaixoDir, Ponto4D ptoCimaDir, Ponto4D ptCimaEsq, Ponto4D ptBaixoEsq, int qtdPontos)
         {
             base.PontosRemoverTodos();
             double t = 1.0 / qtdPontos;
             double x, y, z;
+            
             for (double i = 0; i <= 1; i += t)  
             {
-                x = (Math.Pow((1 - i), 3) * ptoCimaEsq.X) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.X) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.X) + (Math.Pow(i, 3) * ptoBaixoDir.X);
-                y = (Math.Pow((1 - i), 3) * ptoCimaEsq.Y) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Y) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.Y) + (Math.Pow(i, 3) * ptoBaixoDir.Y);
-                z = (Math.Pow((1 - i), 3) * ptoCimaEsq.Z) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Z) + (3 * Math.Pow(i, 2)* (1 - i) * ptoBaixoEsc.Z) + (Math.Pow(i, 3) * ptoBaixoDir.Z);
-                base.PontosAdicionar(new Ponto4D(x, y, 0));
+                x = (Math.Pow((1 - i), 3) * ptBaixoDir.X) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.X) + (3 * Math.Pow(i, 2)* (1 - i) * ptCimaEsq.X) + (Math.Pow(i, 3) * ptBaixoEsq.X);
+                y = (Math.Pow((1 - i), 3) * ptBaixoDir.Y) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Y) + (3 * Math.Pow(i, 2)* (1 - i) * ptCimaEsq.Y) + (Math.Pow(i, 3) * ptBaixoEsq.Y);
+                z = (Math.Pow((1 - i), 3) * ptBaixoDir.Z) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.Z) + (3 * Math.Pow(i, 2)* (1 - i) * ptCimaEsq.Z) + (Math.Pow(i, 3) * ptBaixoEsq.Z);
+                base.PontosAdicionar(new Ponto4D(x, y, z));
             }
-            x = ptoBaixoDir.X;
-            y = ptoBaixoDir.Y;
-            z = ptoBaixoDir.Z;
+            x = ptBaixoEsq.X;
+            y = ptBaixoEsq.Y;
+            z = ptBaixoEsq.Z;
             base.PontosAdicionar(new Ponto4D(x, y, z));
         }
 
