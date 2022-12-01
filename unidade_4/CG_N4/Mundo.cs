@@ -57,16 +57,12 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      objetoId = Utilitario.charProximo(objetoId);
       const double LARGURA_CHAO = 10;
       const double PROFUNDIDADE_CHAO = 12;
+      objetosLista.Add(Floor(LARGURA_CHAO, PROFUNDIDADE_CHAO));
 
-      objetosLista.Add(Floor(LARGURA_CHAO, PROFUNDIDADE_CHAO, objetoId));
-
-      objetoId = Utilitario.charProximo(objetoId);
       const double COMPRIMENTO_ARESTA_DADO = 5;
-
-      objetosLista.Add(Dice(COMPRIMENTO_ARESTA_DADO, objetoId));
+      objetosLista.Add(Dice(COMPRIMENTO_ARESTA_DADO));
 
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
@@ -93,8 +89,10 @@ namespace gcgcg
       GL.Enable(EnableCap.CullFace);
     }
 
-    private ObjetoGeometria Dice(double edgeLength, char objetoId)
+    private ObjetoGeometria Dice(double edgeLength)
     {
+      objetoId = Utilitario.charProximo(objetoId);
+
       Cubo dice = new Cubo(objetoId, null);
 
       Objeto objetoDice = (Objeto)dice;
@@ -111,13 +109,17 @@ namespace gcgcg
       objetoGeometriaDice.ObjetoCor.CorB = 255;
 
       objetoId = Utilitario.charProximo(objetoId);
-      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0, 0, 0.5, objetoId));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0, 0, -0.5));
+
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0, 0.5, 0));
 
       return objetoGeometriaDice;
     }
 
-    private Circulo DiceCircle(double translationX, double translationY, double translationZ, char objetoId)
+    private Circulo DiceCircle(double translationX, double translationY, double translationZ)
     {
+      objetoId = Utilitario.charProximo(objetoId);
+
       Circulo circle = new Circulo(objetoId, null, 0.03, 50);
       circle.PrimitivaTipo = PrimitiveType.Points;
       circle.PrimitivaTamanho = 5;
@@ -131,8 +133,10 @@ namespace gcgcg
       return circle;
     }
 
-    private ObjetoGeometria Floor(double width, double depth, char objetoId)
+    private ObjetoGeometria Floor(double width, double depth)
     {
+      objetoId = Utilitario.charProximo(objetoId);
+
       Cubo floor = new Cubo(objetoId, null);
 
       Objeto objetoFloor = (Objeto)floor;
