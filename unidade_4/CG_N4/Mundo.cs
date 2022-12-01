@@ -50,7 +50,7 @@ namespace gcgcg
       aspect = Width / (float)Height;
       near = 1.0f;
       far = 50.0f;
-      eye = new Vector3(1, 5, -20);
+      eye = new Vector3(15, 25, 40);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
 
@@ -239,6 +239,10 @@ namespace gcgcg
       {
         if (objetoSelecionado != null) objetoSelecionado.MenuTecla(e.Key, menuEixoSelecao, deslocamento, bBoxDesenhar);
         else Console.WriteLine(" ... Objeto NÃO selecionado.");
+      }
+      else if (e.Key == Key.Number0)
+      {
+        eye = new Vector3(5, 20, -20);
       }
       else if (e.Key == Key.Number1)
       {
