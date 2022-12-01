@@ -61,20 +61,13 @@ namespace gcgcg
       objetoId = Utilitario.charProximo(objetoId);
       const double LARGURA_CHAO = 10;
       const double PROFUNDIDADE_CHAO = 12;
-      drawFloor(LARGURA_CHAO, PROFUNDIDADE_CHAO, objetoId);
+
+      objetosLista.Add(Floor(LARGURA_CHAO, PROFUNDIDADE_CHAO, objetoId));
 
       objetoId = Utilitario.charProximo(objetoId);
       const double COMPRIMENTO_ARESTA_DADO = 5;
-      objetoSelecionado = drawDice(COMPRIMENTO_ARESTA_DADO, objetoId);
 
-      objetoId = Utilitario.charProximo(objetoId);
-      Circulo obj_Circulo = new Circulo(objetoId, null, 0.03, 1);
-      obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
-      obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
-      obj_Circulo.PrimitivaTamanho = 5;
-      objetoSelecionado.FilhoAdicionar(obj_Circulo);
-
-      obj_Circulo.Translacao(0.5, 'z');
+      objetosLista.Add(Dice(COMPRIMENTO_ARESTA_DADO, objetoId));
 
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
@@ -101,7 +94,7 @@ namespace gcgcg
       GL.Enable(EnableCap.CullFace);
     }
 
-    private ObjetoGeometria drawDice(double edgeLength, char objetoId)
+    private ObjetoGeometria Dice(double edgeLength, char objetoId)
     {
       Cubo dice = new Cubo(objetoId, null);
 
@@ -118,12 +111,28 @@ namespace gcgcg
       objetoGeometriaDice.ObjetoCor.CorG = 255;
       objetoGeometriaDice.ObjetoCor.CorB = 255;
 
-      objetosLista.Add(dice);
+      objetoId = Utilitario.charProximo(objetoId);
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0, 0, 0.5, objetoId));
 
       return objetoGeometriaDice;
     }
 
-    private ObjetoGeometria drawFloor(double width, double depth, char objetoId)
+    private Circulo DiceCircle(double translationX, double translationY, double translationZ, char objetoId)
+    {
+      Circulo circle = new Circulo(objetoId, null, 0.03, 1);
+      circle.PrimitivaTipo = PrimitiveType.Points;
+      circle.PrimitivaTamanho = 5;
+
+      circle.Translacao(translationX, 'x');
+      circle.Translacao(translationY, 'y');
+      circle.Translacao(translationZ, 'z');
+
+      circle.ObjetoCor.CorR = 0; circle.ObjetoCor.CorG = 0; circle.ObjetoCor.CorB = 0;
+
+      return circle;
+    }
+
+    private ObjetoGeometria Floor(double width, double depth, char objetoId)
     {
       Cubo floor = new Cubo(objetoId, null);
 
@@ -138,8 +147,6 @@ namespace gcgcg
       objetoGeometriaFloor.ObjetoCor.CorR = 40;
       objetoGeometriaFloor.ObjetoCor.CorG = 40;
       objetoGeometriaFloor.ObjetoCor.CorB = 40;
-
-      objetosLista.Add(floor);
 
       return objetoGeometriaFloor;
     }
