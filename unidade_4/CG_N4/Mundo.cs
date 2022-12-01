@@ -50,8 +50,7 @@ namespace gcgcg
       aspect = Width / (float)Height;
       near = 1.0f;
       far = 50.0f;
-      eye = new Vector3(5, 20, 40);
-      // eye = new Vector3(20, 30, 20);
+      eye = new Vector3(1, 5, -20);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
 
@@ -119,7 +118,7 @@ namespace gcgcg
 
     private Circulo DiceCircle(double translationX, double translationY, double translationZ, char objetoId)
     {
-      Circulo circle = new Circulo(objetoId, null, 0.03, 1);
+      Circulo circle = new Circulo(objetoId, null, 0.03, 50);
       circle.PrimitivaTipo = PrimitiveType.Points;
       circle.PrimitivaTamanho = 5;
 
@@ -214,6 +213,30 @@ namespace gcgcg
       {
         if (objetoSelecionado != null) objetoSelecionado.MenuTecla(e.Key, menuEixoSelecao, deslocamento, bBoxDesenhar);
         else Console.WriteLine(" ... Objeto NÃO selecionado.");
+      }
+      else if (e.Key == Key.Number1)
+      {
+        eye = new Vector3(1, 5, -20);
+      }
+      else if (e.Key == Key.Number2)
+      {
+        eye = new Vector3(1, 5, 20);
+      }
+      else if (e.Key == Key.Number3)
+      {
+        eye = new Vector3(20, 5, 1);
+      }
+      else if (e.Key == Key.Number4)
+      {
+        eye = new Vector3(-20, 5, 1);
+      }
+      else if (e.Key == Key.Number5)
+      {
+        eye = new Vector3(1, 20, 1);
+      }
+      else if (e.Key == Key.Number6)
+      {
+        eye = new Vector3(1, -20, 1);
       }
 
       else
