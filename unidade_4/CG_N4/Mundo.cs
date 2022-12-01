@@ -108,10 +108,32 @@ namespace gcgcg
       objetoGeometriaDice.ObjetoCor.CorG = 255;
       objetoGeometriaDice.ObjetoCor.CorB = 255;
 
-      objetoId = Utilitario.charProximo(objetoId);
       objetoGeometriaDice.FilhoAdicionar(DiceCircle(0, 0, -0.5));
 
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.5, -0.3, -0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.5, 0.3, 0.3));
+
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.3, 0.5, -0.3));
       objetoGeometriaDice.FilhoAdicionar(DiceCircle(0, 0.5, 0));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.3, 0.5, 0.3));
+
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.3, -0.5, 0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.3, -0.5, -0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.3, -0.5, 0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.3, -0.5, -0.3));
+
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.5, 0.3, 0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.5, -0.3, 0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.5, 0, 0));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.5, 0.3, -0.3));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.5, -0.3, -0.3));
+
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.3, -0.3, 0.5));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.3, 0, 0.5));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(0.3, 0.3, 0.5));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.3, -0.3, 0.5));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.3, 0, 0.5));
+      objetoGeometriaDice.FilhoAdicionar(DiceCircle(-0.3, 0.3, 0.5));
 
       return objetoGeometriaDice;
     }
