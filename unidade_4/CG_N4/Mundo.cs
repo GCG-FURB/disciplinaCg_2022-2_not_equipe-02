@@ -51,8 +51,8 @@ namespace gcgcg
       aspect = Width / (float)Height;
       near = 1.0f;
       far = 50.0f;
-      eye = new Vector3(10, 10, 10);
-      // eye = new Vector3(20, 30, 20);
+      eye = new Vector3(5, 20, 40);
+     // eye = new Vector3(20, 30, 20);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
       
@@ -81,10 +81,22 @@ namespace gcgcg
       objetoSelecionado.ObjetoCor.CorG = 255;
       objetoSelecionado.ObjetoCor.CorB = 255;
       Objeto objeto_dado = (Objeto) objetoSelecionado;
-      objeto_dado.Translacao(0.5, 'x');
-      objeto_dado.Translacao(0.5, 'y');
-      objeto_dado.Translacao(0.5, 'z');
+      objeto_dado.EscalaXYZBBox(5, 5, 5);
+      objeto_dado.Translacao(2.5, 'x');
+      objeto_dado.Translacao(2.5, 'y');
+      objeto_dado.Translacao(2.5, 'z');
+      
      
+      objetoId = Utilitario.charProximo(objetoId);        
+      Circulo obj_Circulo = new Circulo(objetoId, null, 0.03, 1);
+      obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
+      obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
+      obj_Circulo.PrimitivaTamanho = 5;
+      objetoSelecionado.FilhoAdicionar(obj_Circulo);
+
+      obj_Circulo.Translacao(0.5, 'z');
+
+      
       
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
