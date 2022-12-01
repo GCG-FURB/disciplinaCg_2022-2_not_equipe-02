@@ -51,7 +51,8 @@ namespace gcgcg
       aspect = Width / (float)Height;
       near = 1.0f;
       far = 50.0f;
-      eye = new Vector3(20, 30, 20);
+      eye = new Vector3(10, 10, 10);
+      // eye = new Vector3(20, 30, 20);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
       
@@ -62,24 +63,27 @@ namespace gcgcg
       obj_Cubo = new Cubo(objetoId, null);
       objetosLista.Add(obj_Cubo);      
       objetoSelecionado = obj_Cubo;
-      objetoSelecionado.ObjetoCor.CorR =  40;
-      objetoSelecionado.ObjetoCor.CorG =  40;
-      objetoSelecionado.ObjetoCor.CorB =  40;
+      objetoSelecionado.ObjetoCor.CorR = 40;
+      objetoSelecionado.ObjetoCor.CorG = 40;
+      objetoSelecionado.ObjetoCor.CorB = 40;
       const double LARGURA_CHAO = 10;
       const double PROFUNDIDADE_CHAO = 12;
-      Objeto objeto_escala = (Objeto) objetoSelecionado;
-      objeto_escala.EscalaXYZBBox(LARGURA_CHAO, 1, PROFUNDIDADE_CHAO);
-      objeto_escala.Translacao(LARGURA_CHAO/2, 'x');
-      objeto_escala.Translacao(-0.5, 'y');
-      objeto_escala.Translacao(PROFUNDIDADE_CHAO/2, 'z');
-      
+      Objeto objeto_chao = (Objeto) objetoSelecionado;
+      objeto_chao.EscalaXYZBBox(LARGURA_CHAO, 1, PROFUNDIDADE_CHAO);
+      objeto_chao.Translacao(LARGURA_CHAO/2, 'x');
+      objeto_chao.Translacao(-0.5, 'y');
+      objeto_chao.Translacao(PROFUNDIDADE_CHAO/2, 'z');
       
       objetoId = Utilitario.charProximo(objetoId);
       objetoSelecionado = new Cubo(objetoId, null);
       objetosLista.Add(objetoSelecionado);
-      objetoSelecionado.ObjetoCor.CorR =  255;
-      objetoSelecionado.ObjetoCor.CorG =  255;
-      objetoSelecionado.ObjetoCor.CorB =  255;
+      objetoSelecionado.ObjetoCor.CorR = 255;
+      objetoSelecionado.ObjetoCor.CorG = 255;
+      objetoSelecionado.ObjetoCor.CorB = 255;
+      Objeto objeto_dado = (Objeto) objetoSelecionado;
+      objeto_dado.Translacao(0.5, 'x');
+      objeto_dado.Translacao(0.5, 'y');
+      objeto_dado.Translacao(0.5, 'z');
      
       
 #if CG_Privado  //FIXME: arrumar os outros objetos
