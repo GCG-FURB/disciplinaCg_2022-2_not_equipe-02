@@ -64,17 +64,8 @@ namespace gcgcg
       drawFloor(LARGURA_CHAO, PROFUNDIDADE_CHAO, objetoId);
 
       objetoId = Utilitario.charProximo(objetoId);
-      objetoSelecionado = new Cubo(objetoId, null);
-      objetosLista.Add(objetoSelecionado);
-      objetoSelecionado.ObjetoCor.CorR = 255;
-      objetoSelecionado.ObjetoCor.CorG = 255;
-      objetoSelecionado.ObjetoCor.CorB = 255;
-      Objeto objeto_dado = (Objeto)objetoSelecionado;
-      objeto_dado.EscalaXYZBBox(5, 5, 5);
-      objeto_dado.Translacao(2.5, 'x');
-      objeto_dado.Translacao(2.5, 'y');
-      objeto_dado.Translacao(2.5, 'z');
-
+      const double COMPRIMENTO_ARESTA_DADO = 5;
+      objetoSelecionado = drawDice(COMPRIMENTO_ARESTA_DADO, objetoId);
 
       objetoId = Utilitario.charProximo(objetoId);
       Circulo obj_Circulo = new Circulo(objetoId, null, 0.03, 1);
@@ -110,25 +101,47 @@ namespace gcgcg
       GL.Enable(EnableCap.CullFace);
     }
 
+    private ObjetoGeometria drawDice(double edgeLength, char objetoId)
+    {
+      Cubo dice = new Cubo(objetoId, null);
+
+      Objeto objetoDice = (Objeto)dice;
+
+      objetoDice.EscalaXYZBBox(edgeLength, edgeLength, edgeLength);
+      objetoDice.Translacao(edgeLength / 2, 'x');
+      objetoDice.Translacao(edgeLength / 2, 'y');
+      objetoDice.Translacao(edgeLength / 2, 'z');
+
+      ObjetoGeometria objetoGeometriaDice = (ObjetoGeometria)dice;
+
+      objetoGeometriaDice.ObjetoCor.CorR = 255;
+      objetoGeometriaDice.ObjetoCor.CorG = 255;
+      objetoGeometriaDice.ObjetoCor.CorB = 255;
+
+      objetosLista.Add(dice);
+
+      return objetoGeometriaDice;
+    }
+
     private ObjetoGeometria drawFloor(double width, double depth, char objetoId)
     {
-      Cubo cube = new Cubo(objetoId, null);
+      Cubo floor = new Cubo(objetoId, null);
 
-      Objeto objetoCube = (Objeto)cube;
-      objetoCube.EscalaXYZBBox(width, 1, depth);
-      objetoCube.Translacao(width / 2, 'x');
-      objetoCube.Translacao(-0.5, 'y');
-      objetoCube.Translacao(depth / 2, 'z');
+      Objeto objetoFloor = (Objeto)floor;
+      objetoFloor.EscalaXYZBBox(width, 1, depth);
+      objetoFloor.Translacao(width / 2, 'x');
+      objetoFloor.Translacao(-0.5, 'y');
+      objetoFloor.Translacao(depth / 2, 'z');
 
-      ObjetoGeometria objetoGeometriaCube = (ObjetoGeometria)cube;
+      ObjetoGeometria objetoGeometriaFloor = (ObjetoGeometria)floor;
 
-      objetoGeometriaCube.ObjetoCor.CorR = 40;
-      objetoGeometriaCube.ObjetoCor.CorG = 40;
-      objetoGeometriaCube.ObjetoCor.CorB = 40;
+      objetoGeometriaFloor.ObjetoCor.CorR = 40;
+      objetoGeometriaFloor.ObjetoCor.CorG = 40;
+      objetoGeometriaFloor.ObjetoCor.CorB = 40;
 
-      objetosLista.Add(cube);
+      objetosLista.Add(floor);
 
-      return objetoGeometriaCube;
+      return objetoGeometriaFloor;
     }
     protected override void OnResize(EventArgs e)
     {
