@@ -38,7 +38,6 @@ namespace gcgcg
     private Esfera obj_Esfera;
     private Cone obj_Cone;
 #endif
-    private Cubo obj_Cubo;
 
     protected override void OnLoad(EventArgs e)
     {
@@ -46,48 +45,38 @@ namespace gcgcg
       GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
       GL.Enable(EnableCap.DepthTest);
       GL.Enable(EnableCap.CullFace);
-  // ___ parâmetros da câmera sintética
+      // ___ parâmetros da câmera sintética
       fovy = (float)Math.PI / 4;
       aspect = Width / (float)Height;
       near = 1.0f;
       far = 50.0f;
       eye = new Vector3(5, 20, 40);
-     // eye = new Vector3(20, 30, 20);
+      // eye = new Vector3(20, 30, 20);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
-      
+
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
       objetoId = Utilitario.charProximo(objetoId);
-      obj_Cubo = new Cubo(objetoId, null);
-      objetosLista.Add(obj_Cubo);      
-      objetoSelecionado = obj_Cubo;
-      objetoSelecionado.ObjetoCor.CorR = 40;
-      objetoSelecionado.ObjetoCor.CorG = 40;
-      objetoSelecionado.ObjetoCor.CorB = 40;
       const double LARGURA_CHAO = 10;
       const double PROFUNDIDADE_CHAO = 12;
-      Objeto objeto_chao = (Objeto) objetoSelecionado;
-      objeto_chao.EscalaXYZBBox(LARGURA_CHAO, 1, PROFUNDIDADE_CHAO);
-      objeto_chao.Translacao(LARGURA_CHAO/2, 'x');
-      objeto_chao.Translacao(-0.5, 'y');
-      objeto_chao.Translacao(PROFUNDIDADE_CHAO/2, 'z');
-      
+      drawFloor(LARGURA_CHAO, PROFUNDIDADE_CHAO, objetoId);
+
       objetoId = Utilitario.charProximo(objetoId);
       objetoSelecionado = new Cubo(objetoId, null);
       objetosLista.Add(objetoSelecionado);
       objetoSelecionado.ObjetoCor.CorR = 255;
       objetoSelecionado.ObjetoCor.CorG = 255;
       objetoSelecionado.ObjetoCor.CorB = 255;
-      Objeto objeto_dado = (Objeto) objetoSelecionado;
+      Objeto objeto_dado = (Objeto)objetoSelecionado;
       objeto_dado.EscalaXYZBBox(5, 5, 5);
       objeto_dado.Translacao(2.5, 'x');
       objeto_dado.Translacao(2.5, 'y');
       objeto_dado.Translacao(2.5, 'z');
-      
-     
-      objetoId = Utilitario.charProximo(objetoId);        
+
+
+      objetoId = Utilitario.charProximo(objetoId);
       Circulo obj_Circulo = new Circulo(objetoId, null, 0.03, 1);
       obj_Circulo.ObjetoCor.CorR = 0; obj_Circulo.ObjetoCor.CorG = 0; obj_Circulo.ObjetoCor.CorB = 0;
       obj_Circulo.PrimitivaTipo = PrimitiveType.Points;
@@ -96,8 +85,6 @@ namespace gcgcg
 
       obj_Circulo.Translacao(0.5, 'z');
 
-      
-      
 #if CG_Privado  //FIXME: arrumar os outros objetos
       objetoId = Utilitario.charProximo(objetoId);
       obj_Cilindro = new Cilindro(objetoId, null);
@@ -121,6 +108,27 @@ namespace gcgcg
       GL.ClearColor(0.5f, 0.5f, 0.5f, 1.0f);
       GL.Enable(EnableCap.DepthTest);
       GL.Enable(EnableCap.CullFace);
+    }
+
+    private ObjetoGeometria drawFloor(double width, double depth, char objetoId)
+    {
+      Cubo cube = new Cubo(objetoId, null);
+
+      Objeto objetoCube = (Objeto)cube;
+      objetoCube.EscalaXYZBBox(width, 1, depth);
+      objetoCube.Translacao(width / 2, 'x');
+      objetoCube.Translacao(-0.5, 'y');
+      objetoCube.Translacao(depth / 2, 'z');
+
+      ObjetoGeometria objetoGeometriaCube = (ObjetoGeometria)cube;
+
+      objetoGeometriaCube.ObjetoCor.CorR = 40;
+      objetoGeometriaCube.ObjetoCor.CorG = 40;
+      objetoGeometriaCube.ObjetoCor.CorB = 40;
+
+      objetosLista.Add(cube);
+
+      return objetoGeometriaCube;
     }
     protected override void OnResize(EventArgs e)
     {
