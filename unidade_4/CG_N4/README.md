@@ -4,7 +4,7 @@
 
 ### 1 ao 6
 
-Muda o ângulo da câmera para visualizar os números dos dados em cada face
+Muda o ângulo da câmera para visualizar os números dos dados em cada face.
 
 ## Diagrama de Classes
 
