@@ -32,6 +32,7 @@ namespace gcgcg
     private char menuEixoSelecao = 'z';
     private float deslocamento = 0;
     private bool bBoxDesenhar = false;
+    private Spline spline;
 
 #if CG_Privado
     private Cilindro obj_Cilindro;
@@ -49,7 +50,7 @@ namespace gcgcg
       fovy = (float)Math.PI / 4;
       aspect = Width / (float)Height;
       near = 1.0f;
-      far = 50.0f;
+      far = 100.0f;
       eye = new Vector3(15, 25, 40);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
@@ -57,9 +58,20 @@ namespace gcgcg
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
 
-      const double LARGURA_CHAO = 10;
-      const double PROFUNDIDADE_CHAO = 12;
+      const double LARGURA_CHAO = 50;
+      const double PROFUNDIDADE_CHAO = 50;
       objetosLista.Add(Floor(LARGURA_CHAO, PROFUNDIDADE_CHAO));
+
+      objetoId = Utilitario.charProximo(objetoId);
+      Ponto4D centroCubo = new Ponto4D(0.5, 0.5, 0.5);
+      Ponto4D destino = new Ponto4D(LARGURA_CHAO - 10, 1, PROFUNDIDADE_CHAO -10);
+      Ponto4D cimaEsq = new Ponto4D(10, 20, 10);
+      Ponto4D cimaDir = new Ponto4D(30, 20, 30);
+
+      spline = new Spline(objetoId, null,destino, cimaDir, cimaEsq,centroCubo, 20);
+      objetoSelecionado = spline;
+      objetoSelecionado.PrimitivaTipo = PrimitiveType.LineStrip;
+      objetosLista.Add(spline);
 
       const double COMPRIMENTO_ARESTA_DADO = 5;
       objetosLista.Add(Dice(COMPRIMENTO_ARESTA_DADO));
@@ -242,7 +254,7 @@ namespace gcgcg
       }
       else if (e.Key == Key.Number0)
       {
-        eye = new Vector3(5, 20, -20);
+        eye = new Vector3(-20, 10, -50);
       }
       else if (e.Key == Key.Number1)
       {
