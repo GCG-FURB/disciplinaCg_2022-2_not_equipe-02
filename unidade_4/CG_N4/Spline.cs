@@ -24,7 +24,6 @@ namespace gcgcg
             base.PontosRemoverTodos();
             double t = 1.0 / qtdPontos;
             double x, y, z;
-            
             for (double i = 0; i <= 1; i += t)  
             {
                 x = (Math.Pow((1 - i), 3) * ptBaixoDir.X) + (3 * i * Math.Pow((1 - i), 2) * ptoCimaDir.X) + (3 * Math.Pow(i, 2)* (1 - i) * ptCimaEsq.X) + (Math.Pow(i, 3) * ptBaixoEsq.X);
