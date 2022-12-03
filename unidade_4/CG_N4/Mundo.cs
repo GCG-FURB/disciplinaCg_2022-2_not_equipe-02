@@ -34,9 +34,12 @@ namespace gcgcg
     private float deslocamento = 0;
     private bool bBoxDesenhar = false;
     private Cubo dado;
+    private bool movingCamera = false;
     private const double LARGURA_CHAO = 50;
     private const double PROFUNDIDADE_CHAO = 50;
     const double COMPRIMENTO_ARESTA_DADO = 2;
+    private float previousX = 0;
+    private int actualDegree = 0;
 
 #if CG_Privado
     private Cilindro obj_Cilindro;
@@ -306,7 +309,38 @@ namespace gcgcg
 
     protected override void OnMouseMove(MouseMoveEventArgs e)
     {
+      if (movingCamera)
+      {
+        int newAngleDegree = GetNewDegreeForCamera(e.X, this.previousX, actualDegree);
 
+        Ponto4D newPoint = Matematica.GerarPtosCirculo(newAngleDegree, 30);
+        eye = new Vector3((float)newPoint.X, 10, (float)newPoint.Y);
+
+        this.previousX = e.X;
+        this.actualDegree = newAngleDegree;
+      }
+    }
+
+    private int GetNewDegreeForCamera(float actualX, float previousX, int actualDegree)
+    {
+      bool isMovingToRightSide = (actualX - previousX > 0);
+
+      if (isMovingToRightSide && actualDegree == 359) return 0;
+      else if (isMovingToRightSide == false && actualDegree == 0) return 359;
+
+      return isMovingToRightSide ? actualDegree += 1 : actualDegree -= 1;
+    }
+
+    protected override void OnMouseDown(MouseButtonEventArgs e)
+    {
+      base.OnMouseDown(e);
+      movingCamera = true;
+    }
+
+    protected override void OnMouseUp(MouseButtonEventArgs e)
+    {
+      base.OnMouseUp(e);
+      movingCamera = false;
     }
 
 #if CG_Gizmo
