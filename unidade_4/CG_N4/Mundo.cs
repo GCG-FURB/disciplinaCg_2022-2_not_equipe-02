@@ -40,6 +40,7 @@ namespace gcgcg
     const double COMPRIMENTO_ARESTA_DADO = 2;
     private float previousX = 0;
     private int actualDegree = 0;
+    private int cameraRadius = 20;
 
 #if CG_Privado
     private Cilindro obj_Cilindro;
@@ -313,7 +314,7 @@ namespace gcgcg
       {
         int newAngleDegree = GetNewDegreeForCamera(e.X, this.previousX, actualDegree);
 
-        Ponto4D newPoint = Matematica.GerarPtosCirculo(newAngleDegree, 30);
+        Ponto4D newPoint = Matematica.GerarPtosCirculo(newAngleDegree, cameraRadius);
         eye = new Vector3((float)newPoint.X, 10, (float)newPoint.Y);
 
         this.previousX = e.X;
@@ -341,6 +342,14 @@ namespace gcgcg
     {
       base.OnMouseUp(e);
       movingCamera = false;
+    }
+
+    protected override void OnMouseWheel(MouseWheelEventArgs e)
+    {
+      base.OnMouseWheel(e);
+      cameraRadius = (e.Value * -1) + 20; //20 cause its the initial value
+      Ponto4D newPoint = Matematica.GerarPtosCirculo(actualDegree, cameraRadius);
+      eye = new Vector3((float)newPoint.X, 10, (float)newPoint.Y);
     }
 
 #if CG_Gizmo
