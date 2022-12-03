@@ -22,8 +22,8 @@ Muda o ângulo da câmera para visualizar os números dos dados em cada face.
 4. <s>Desenhar trajetória de arremesso do dado com Spline.</s>
 5. Incluir iluminação.
 6. <s>Permitir mudar o angulo horizontal da câmera ao mover o mouse com ele estando clicado.</s>
-7. Permitir mudar a altura da câmera ao mover o mouse com ele estando clicado.
-8. Permitir aplicar zoom in e zoom out ao aplicar o scroll do mouse.
+7. <s>Permitir mudar a altura da câmera ao mover o mouse com ele estando clicado</s>.
+8. <s>Permitir aplicar zoom in e zoom out ao aplicar o scroll do mouse</s>.
 
 ## Diagrama de Classes 📑
 
