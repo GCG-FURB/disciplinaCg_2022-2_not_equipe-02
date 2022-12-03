@@ -77,17 +77,34 @@ namespace gcgcg
         {
             Random rd = new Random();
             List<Ponto4D> pontos = Matematica.GerarPtosSpline(ptBaixoDir, ptCimaDir, ptCimaEsq, ptBaixoEsq, qtdPontos);
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            int count = 0;
             foreach (Ponto4D ponto in pontos)
             {
                 // ver como corrigir
-                this.AtribuirIdentidade();
-                this.Translacao(ponto.X, 'x');
-                this.Translacao(ponto.Y, 'y');
-                this.Translacao(ponto.Z, 'z');
-
+                //this.AtribuirIdentidade();
+                if (count >= (pontos.Count/ 2))
+                {
+                    this.Translacao(ponto.X - x, 'x');
+                    this.Translacao(ponto.Y - y, 'y');
+                    this.Translacao(ponto.Z - z, 'z');
+                }
+                else
+                {
+                    this.Translacao(Math.Abs(ponto.X - x), 'x');
+                    this.Translacao(Math.Abs(ponto.Y - y), 'y');
+                    this.Translacao(Math.Abs(ponto.Z - z), 'z');
+                }
                 this.Rotacao(rd.Next(5, 20), 'z');
                 this.Rotacao(rd.Next(1, 10), 'x');
                 this.Rotacao(rd.Next(1, 10), 'y');
+
+                x = ponto.X;
+                y = ponto.Y;
+                z = ponto.Z;
+                count++;
                 Thread.Sleep(0050);
             }
         }

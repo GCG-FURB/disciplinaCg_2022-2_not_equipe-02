@@ -36,7 +36,7 @@ namespace gcgcg
         private Cubo dado;
         private const double LARGURA_CHAO = 50;
         private const double PROFUNDIDADE_CHAO = 50;
-        const double COMPRIMENTO_ARESTA_DADO = 5;
+        const double COMPRIMENTO_ARESTA_DADO = 2;
 
 #if CG_Privado
     private Cilindro obj_Cilindro;
@@ -158,8 +158,8 @@ namespace gcgcg
                 {
                     Ponto4D ptBaixoEsq = new Ponto4D(0, 0, 0);
                     Ponto4D ptBaixoDir = new Ponto4D(rd.Next(5, Convert.ToInt32(LARGURA_CHAO) - 10), 1, rd.Next(5, Convert.ToInt32(PROFUNDIDADE_CHAO) - 10));
-                    Ponto4D ptCimaEsq = new Ponto4D(rd.Next(10, 30), 20, rd.Next(10, 30));
-                    Ponto4D ptCimaDir = new Ponto4D(rd.Next(10, 30), 20, rd.Next(10, 30));
+                    Ponto4D ptCimaEsq = new Ponto4D(rd.Next(10, 30), 15, rd.Next(10, 30));
+                    Ponto4D ptCimaDir = new Ponto4D(rd.Next(10, 30), 15, rd.Next(10, 30));
 
                     dado.AtribuirIdentidade();
                     dado.EscalaXYZBBox(COMPRIMENTO_ARESTA_DADO, COMPRIMENTO_ARESTA_DADO, COMPRIMENTO_ARESTA_DADO);
@@ -276,7 +276,7 @@ namespace gcgcg
             }
             else if (e.Key == Key.Number0)
             {
-                eye = new Vector3(-20, 10, -30);
+                eye = new Vector3(-20, 10, -20);
             }
             else if (e.Key == Key.Number1)
             {
@@ -292,7 +292,7 @@ namespace gcgcg
             }
             else if (e.Key == Key.Number4)
             {
-                eye = new Vector3(Convert.ToInt32(LARGURA_CHAO) + 20, 30, Convert.ToInt32(PROFUNDIDADE_CHAO) + 20);
+                eye = new Vector3(Convert.ToInt32(LARGURA_CHAO) + 10, 30, Convert.ToInt32(PROFUNDIDADE_CHAO) + 10);
             }
             else if (e.Key == Key.Number5)
             {
