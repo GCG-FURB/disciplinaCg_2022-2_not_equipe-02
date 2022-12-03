@@ -38,8 +38,10 @@ namespace gcgcg
     private const double LARGURA_CHAO = 50;
     private const double PROFUNDIDADE_CHAO = 50;
     const double COMPRIMENTO_ARESTA_DADO = 2;
-    private float previousX = 0;
-    private int actualDegree = 0;
+    private float previousMouseX = 0;
+    private int actualDegreeHorizontal = 0;
+    private float previousMouseY = 0;
+    private int actualDegreeVertical = 0;
     private int cameraRadius = 20;
 
 #if CG_Privado
@@ -312,24 +314,51 @@ namespace gcgcg
     {
       if (movingCamera)
       {
-        int newAngleDegree = GetNewDegreeForCamera(e.X, this.previousX, actualDegree);
+        int newAngleDegreeHorizontal = GetNewDegreeForCameraHorizontal(e.X, this.previousMouseX, actualDegreeHorizontal);
+        int newAngleDegreeVertical = GetNewDegreeForCameraVertical(e.Y, this.previousMouseY, actualDegreeVertical);
 
-        Ponto4D newPoint = Matematica.GerarPtosCirculo(newAngleDegree, cameraRadius);
-        eye = new Vector3((float)newPoint.X, 10, (float)newPoint.Y);
+        Ponto4D newPoint = Matematica.GerarPtosCirculo(newAngleDegreeHorizontal, cameraRadius);
+        eye = new Vector3((float)newPoint.X, eye.Y, (float)newPoint.Y);
 
-        this.previousX = e.X;
-        this.actualDegree = newAngleDegree;
+        Ponto4D newPointVertical = Matematica.GerarPtosCirculo(newAngleDegreeVertical, cameraRadius);
+        eye = new Vector3(eye.X, (float)(newPointVertical.Y * -1), eye.Z);
+
+        this.previousMouseX = e.X;
+        this.actualDegreeHorizontal = newAngleDegreeHorizontal;
+
+        this.previousMouseY = e.Y;
+        this.actualDegreeVertical = newAngleDegreeVertical;
       }
     }
 
-    private int GetNewDegreeForCamera(float actualX, float previousX, int actualDegree)
+    private int GetNewDegreeForCameraHorizontal(float actualX, float previousX, int actualDegree)
     {
+      if (actualX == previousX)
+      {
+        return actualDegree;
+      }
+
       bool isMovingToRightSide = (actualX - previousX > 0);
 
       if (isMovingToRightSide && actualDegree == 359) return 0;
       else if (isMovingToRightSide == false && actualDegree == 0) return 359;
 
       return isMovingToRightSide ? actualDegree += 1 : actualDegree -= 1;
+    }
+
+    private int GetNewDegreeForCameraVertical(float actualY, float previousY, int actualDegree)
+    {
+      if (actualY == previousY)
+      {
+        return actualDegree;
+      }
+
+      bool isMovingUp = (actualY - previousY > 0);
+
+      if (isMovingUp && actualDegree == 359) return 0;
+      else if (isMovingUp == false && actualDegree == 0) return 359;
+
+      return isMovingUp ? actualDegree += 1 : actualDegree -= 1;
     }
 
     protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -348,8 +377,12 @@ namespace gcgcg
     {
       base.OnMouseWheel(e);
       cameraRadius = (e.Value * -1) + 20; //20 cause its the initial value
-      Ponto4D newPoint = Matematica.GerarPtosCirculo(actualDegree, cameraRadius);
-      eye = new Vector3((float)newPoint.X, 10, (float)newPoint.Y);
+      Ponto4D newPoint = Matematica.GerarPtosCirculo(actualDegreeHorizontal, cameraRadius);
+      eye = new Vector3((float)newPoint.X, eye.Y, (float)newPoint.Y);
+
+      // Ideia de desprender o at por hora fora abandonada
+      // Ponto4D newPointAt = Matematica.GerarPtosCirculo(actualDegreeHorizontal + 180, cameraRadius);
+      // at = new Vector3((float)newPointAt.X, at.Y, (float)newPointAt.Y);
     }
 
 #if CG_Gizmo
