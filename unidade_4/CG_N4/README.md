@@ -2,7 +2,7 @@
 
 ## Como interagir com a aplicação ✨
 
-### - Mouse clicado + arrasto do mouse
+### - Arrasto do mouse clicado
 
 Muda o ângulo da câmera para melhor visualizar o arremesso do dado.
 
