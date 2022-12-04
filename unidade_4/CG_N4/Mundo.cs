@@ -176,7 +176,7 @@ namespace gcgcg
     {
       objetoId = Utilitario.charProximo(objetoId);
 
-      Circulo circle = new Circulo(objetoId, null, 0.03, 10);
+      Circulo circle = new Circulo(objetoId, null, 0.03, 20);
       circle.PrimitivaTipo = PrimitiveType.Points;
       circle.PrimitivaTamanho = 5;
 
