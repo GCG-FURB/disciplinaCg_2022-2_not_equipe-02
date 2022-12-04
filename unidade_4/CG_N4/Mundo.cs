@@ -43,6 +43,7 @@ namespace gcgcg
     private float previousMouseY = 0;
     private int actualDegreeVertical = 0;
     private int cameraRadius = 20;
+    private bool ligaLuz = true;
 
 #if CG_Privado
     private Cilindro obj_Cilindro;
@@ -64,6 +65,17 @@ namespace gcgcg
       eye = new Vector3(15, 25, 40);
       at = new Vector3(0, 0, 0);
       up = new Vector3(0, 1, 0);
+
+      //TODO entender melhor o proposito e funcionamento da luz
+      // Enable Light 0 and set its parameters.
+      GL.Light(LightName.Light0, LightParameter.Position, new float[] { 0.0f, 2.0f, 0.0f });
+      GL.Light(LightName.Light0, LightParameter.Ambient, new float[] { 0.3f, 0.3f, 0.3f, 1.0f });
+      GL.Light(LightName.Light0, LightParameter.Diffuse, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+      GL.Light(LightName.Light0, LightParameter.Specular, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+      GL.Light(LightName.Light0, LightParameter.SpotExponent, new float[] { 1.0f, 1.0f, 1.0f, 1.0f });
+      GL.LightModel(LightModelParameter.LightModelAmbient, new float[] { 0.2f, 0.2f, 0.2f, 1.0f });
+      GL.LightModel(LightModelParameter.LightModelTwoSide, 1);
+      GL.LightModel(LightModelParameter.LightModelLocalViewer, 1);
 
       Console.WriteLine(" --- Ajuda / Teclas: ");
       Console.WriteLine(" [  H     ] mostra teclas usadas. ");
@@ -106,6 +118,13 @@ namespace gcgcg
 
     private Cubo Dice()
     {
+      if (ligaLuz)
+      {
+        GL.Enable(EnableCap.Lighting);
+        GL.Enable(EnableCap.Light0);
+        GL.Enable(EnableCap.ColorMaterial);
+      }
+
       objetoId = Utilitario.charProximo(objetoId);
 
       Cubo dice = new Cubo(objetoId, null);
@@ -145,6 +164,12 @@ namespace gcgcg
       dice.FilhoAdicionar(DiceCircle(-0.3, -0.3, 0.5));
       dice.FilhoAdicionar(DiceCircle(-0.3, 0, 0.5));
       dice.FilhoAdicionar(DiceCircle(-0.3, 0.3, 0.5));
+
+      if (ligaLuz)
+      {
+        GL.Disable(EnableCap.Lighting);
+        GL.Disable(EnableCap.Light0);
+      }
 
       return dice;
     }
@@ -301,6 +326,10 @@ namespace gcgcg
       else if (e.Key == Key.Space)
       {
         dado.setAnimacao(true);
+      }
+      else if (e.Key == Key.L)
+      {
+        ligaLuz = !ligaLuz;
       }
 
       else
